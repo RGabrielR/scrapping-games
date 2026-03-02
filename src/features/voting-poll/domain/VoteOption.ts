@@ -3,4 +3,6 @@ export const VoteOption = {
   NEGATIVO: "NEGATIVO",
   AUSENTE: "AUSENTE",
   ABSTENCION: "ABSTENCION",
-};
+} as const;
+
+export type VoteOptionType = (typeof VoteOption)[keyof typeof VoteOption];

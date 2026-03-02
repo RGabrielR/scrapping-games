@@ -1,10 +1,15 @@
 import { RentResult } from "./RentResult";
+import type { RentEvaluation } from "@/types";
 
-/**
- * Single source of truth for rent scoring ranges.
- * Each entry defines the upper bound (exclusive) of the percentage difference.
- */
-const SCORING_TABLE = [
+interface ScoringEntry {
+  maxPercentDiff: number;
+  result: string;
+  delta: number;
+  title: string;
+  feedbackMessage: string;
+}
+
+const SCORING_TABLE: ScoringEntry[] = [
   {
     maxPercentDiff: 5,
     result: RentResult.EXCELLENT,
@@ -58,21 +63,18 @@ const SCORING_TABLE = [
   },
 ];
 
-const parseArsPrice = (priceString) =>
+const parseArsPrice = (priceString: string): number =>
   parseFloat(
     priceString.replace("ARS ", "").replace("$ ", "").replaceAll(".", "")
   );
 
-/**
- * Evaluates a user's rent guess against the actual price.
- * @param {number} guessedPrice - Already parsed as number (no dots)
- * @param {string} realPriceARS - The real price string in ARS format (e.g. "ARS 1.200.000")
- * @returns {{ result: string, delta: number, percentDiff: number, title: string, feedbackMessage: string }}
- */
-export const evaluateGuess = (guessedPrice, realPriceARS) => {
+export const evaluateGuess = (
+  guessedPrice: number,
+  realPriceARS: string
+): RentEvaluation => {
   const realPrice = parseArsPrice(realPriceARS);
   const percentDiff = Math.abs((100 * guessedPrice) / realPrice - 100);
-  const range = SCORING_TABLE.find((r) => percentDiff < r.maxPercentDiff);
+  const range = SCORING_TABLE.find((r) => percentDiff < r.maxPercentDiff)!;
   return {
     result: range.result,
     delta: range.delta,

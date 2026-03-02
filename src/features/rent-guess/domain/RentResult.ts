@@ -6,4 +6,6 @@ export const RentResult = {
   BAD: "BAD",
   VERY_BAD: "VERY-BAD",
   AWFUL: "AWFUL",
-};
+} as const;
+
+export type RentResultType = (typeof RentResult)[keyof typeof RentResult];
