@@ -1,7 +1,117 @@
 [
   {
-    "name": "ley omnibus",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/5101",
-    "moreInfo": "https://www.infobae.com/politica/2024/02/02/uno-por-uno-asi-votaron-los-bloques-de-la-camara-de-diputados-la-ley-omnibus/"
+    "name": "Legalización del aborto / IVE (2020)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4077",
+    "moreInfo": "https://www.bbc.com/mundo/noticias-america-latina-55483258"
+  },
+  {
+    "name": "Aporte solidario y extraordinario a las grandes fortunas (2020)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4046",
+    "moreInfo": "https://www.pagina12.com.ar/339309-el-aporte-de-las-grandes-fortunas-sumo-223-000-millones"
+  },
+  {
+    "name": "Ley de alquileres (2020, plazo 3 años y aumentos anuales)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/modificacion-depositos-garantia-locacion/3907",
+    "moreInfo": "https://www.lavoz.com.ar/clasificados-inmuebles/a-tres-anos-de-la-ley-de-alquileres-los-balances-son-criticos/"
+  },
+  {
+    "name": "Ley de teletrabajo (2020)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/3993",
+    "moreInfo": "https://www.argentina.gob.ar/justicia/derechofacil/leysimple/teletrabajo"
+  },
+  {
+    "name": "Etiquetado frontal de alimentos / Promoción de la Alimentación Saludable (2021)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4209",
+    "moreInfo": "https://chequeado.com/el-explicador/ley-de-etiquetado-frontal-que-cambia-y-que-no/"
+  },
+  {
+    "name": "Ampliación de Zona Fría para tarifas de gas (2021)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4165",
+    "moreInfo": "https://www.argentina.gob.ar/economia/energia/zona-fria"
+  },
+  {
+    "name": "Acuerdo con el FMI / Programa de Facilidades Extendidas (2022)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4331",
+    "moreInfo": "https://www.reuters.com/world/americas/argentinas-lower-house-approves-imf-deal-after-marathon-session-2022-03-11/"
+  },
+  {
+    "name": "Marco regulatorio para la industria del cannabis medicinal y el cáñamo industrial (2022)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4404",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-APROBO-PROYECTOS-DE-INCENTIVO-A-LA-CONSTRUCCION-RESPUESTA-INTEGRAL-AL-VIH-Y-CANNABIS-MEDICINAL/"
+  },
+  {
+    "name": "Boleta Única Papel (media sanción en Diputados, 2022)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4504",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/OBTUVO-MEDIA-SANCION-LA-BOLETA-UNICA-DE-PAPEL/"
+  },
+  {
+    "name": "Moratoria previsional / Plan de Pago de Deuda Previsional (2023)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4735",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-SANCIONO-LA-MORATORIA-PREVISIONAL-Y-LA-DIGITALIZACION-DE-LAS-HISTORIAS-CLINICAS-00001/"
+  },
+  {
+    "name": "Reforma de la ley de lavado de activos (2023)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4773",
+    "moreInfo": "https://www.ambito.com/politica/diputados-aprobo-la-reforma-la-ley-lavado-activos-y-el-consenso-fiscal-n5700983"
+  },
+  {
+    "name": "Modificación del Impuesto a las Ganancias / cuarta categoría (2023)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4838",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-INICIO-EL-DEBATE-DE-LAS-MODIFICACIONES-AL-IMPUESTO-A-LAS-GANANCIAS/"
+  },
+  {
+    "name": "Ley Olimpia / violencia digital de género (2023)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4868",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-APROBO-EL-PROYECTO-DE-LEY-SOBRE-CREDITOS-HIPOTECARIOS-UVA-Y-DE-VIOLENCIA-DIGITAL-POR-MOTIVOS-DE-GENERO/"
+  },
+  {
+    "name": "Ley de alquileres (reforma 2023, actualizaciones cada 6 meses)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/4869",
+    "moreInfo": "https://www.clarin.com/economia/ley-alquileres-principales-puntos-reforma-pasa-contratos-firmados_0_RxD3uEzCh4.html"
+  },
+  {
+    "name": "Ley Bases y Puntos de Partida para la Libertad de los Argentinos (2024)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5142",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/LA-CAMARA-DE-DIPUTADOS-SANCIONO-LA-LEY-BASES-Y-EL-PAQUETE-FISCAL/"
+  },
+  {
+    "name": "Paquete fiscal / Medidas Fiscales Paliativas y Relevantes (2024)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5143",
+    "moreInfo": "https://www.lanacion.com.ar/politica/paquete-fiscal-despues-de-la-votacion-en-el-senado-que-se-aprobo-y-que-se-rechazo-nid13062024/"
+  },
+  {
+    "name": "Nueva fórmula de movilidad jubilatoria (2024)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5150",
+    "moreInfo": "https://www.infobae.com/politica/2024/06/05/la-oposicion-logro-media-sancion-para-una-nueva-formula-de-movilidad-jubilatoria/"
+  },
+  {
+    "name": "Ley de Financiamiento de Universidades Nacionales (2024)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5306",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/LA-CAMARA-DE-DIPUTADOS-RESPALDO-EL-VETO-DEL-PODER-EJECUTIVO-A-LA-LEY-FINANCIAMIENTO-UNIVERSITARIO/"
+  },
+  {
+    "name": "Boleta Única Papel (sanción definitiva, 2024)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5383",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/EN-UNA-SESION-ESPECIAL-DIPUTADOS-CONVIRTIO-EN-LEY-LA-IMPLEMENTACION-DE-LA-BOLETA-UNICA-PAPEL/"
+  },
+  {
+    "name": "Ficha Limpia (media sanción en Diputados, 2025)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5585",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-DIO-MEDIA-SANCION-AL-PROYECTO-DE-FICHA-LIMPIA/"
+  },
+  {
+    "name": "Financiamiento universitario (insistencia tras veto presidencial, 2025)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5766",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-DIO-MEDIA-SANCION-AL-PROYECTO-DE-LEY-DE-FINANCIAMIENTO-UNIVERSITARIO/"
+  },
+    {
+    "name": "Reforma laboral / Ley de modernización laboral (media sanción en Diputados, 2026)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5853",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/EN-SESION-ESPECIAL-LA-CAMARA-DE-DIPUTADOS-LE-DIO-MEDIA-SANCION-AL-PROYECTO-DE-MODERNIZACION-LABORAL/"
+  },
+  {
+    "name": "Modificación de la ley de glaciares / gestión inteligente de glaciares y desarrollo sustentable de alta montaña (proyecto, 2026)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5919",
+    "moreInfo": "https://www2.hcdn.gob.ar/secparl/dsecretaria/s_t_parlamentario/tp.html?numero=225&periodo=143"
   }
 ]
