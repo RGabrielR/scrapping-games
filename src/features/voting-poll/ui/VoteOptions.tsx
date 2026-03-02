@@ -1,8 +1,8 @@
-/**
- * Renders the three voting buttons for the voting poll game.
- * @param {{ onVote: (options: string[]) => void }} props
- */
-const VoteOptions = ({ onVote }) => {
+interface VoteOptionsProps {
+  onVote: (options: string[]) => void;
+}
+
+const VoteOptions = ({ onVote }: VoteOptionsProps) => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3">
       <button

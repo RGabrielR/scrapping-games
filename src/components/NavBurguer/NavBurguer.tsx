@@ -22,7 +22,7 @@ const NavBurguer = () => {
             }`}
           >
             <div
-              className={`flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden   
+              className={`flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden
               `}
             >
               <div

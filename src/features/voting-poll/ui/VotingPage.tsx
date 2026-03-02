@@ -4,7 +4,7 @@ import Image from "next/image";
 import questionMark from "../../../../public/questionMark.svg";
 import questionMarkClosing from "../../../../public/questionMarkClosing.svg";
 import BlurImage from "@/shared/ui/BlurImage";
-import Loader from "@/shared/ui/Loader";
+import CongressLoader from "@/shared/ui/CongressLoader";
 import ScoreAnimation from "@/shared/ui/ScoreAnimation";
 import ImageDescription from "@/shared/ui/ImageDescription";
 import NavBurguer from "@/components/NavBurguer/NavBurguer";
@@ -15,7 +15,7 @@ import "tailwindcss/tailwind.css";
 import "@/app/globals.scss";
 
 const VotingPage = () => {
-  const { deputy, lastDeputy, result, score, targetScore, showAnimation, vote } =
+  const { deputy, lastDeputy, result, score, targetScore, showAnimation, fetchError, retry, vote } =
     useVotingGame();
 
   return (
@@ -168,7 +168,23 @@ const VotingPage = () => {
               </span>
             </div>
           )}
-          <Loader />
+
+          {fetchError ? (
+            <div className="fade-in flex flex-col items-center gap-4">
+              <p className="text-sm font-medium text-slate-600">
+                {"No se pudo cargar la siguiente pregunta."}
+              </p>
+              <button
+                onClick={retry}
+                className="rounded-full bg-blue-900 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+              >
+                {"Reintentar"}
+              </button>
+            </div>
+          ) : (
+            <CongressLoader />
+          )}
+
           {lastDeputy && (
             <div className="flex w-full justify-center">
               <a
