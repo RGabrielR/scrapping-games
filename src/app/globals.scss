@@ -148,7 +148,7 @@ input[type="number"] {
 }
 
 .animate-result {
-  animation: result-animation 2100ms ease-in-out;
+  animation: result-animation 2100ms ease-in-out forwards;
 }
 
 .loader {
@@ -335,7 +335,7 @@ input[type="number"] {
     transform: translate(-40%, -50%);
   }
   .animate-result {
-    animation: result-animation-small 2100ms ease-in-out;
+    animation: result-animation-small 2100ms ease-in-out forwards;
   }
   .enter-right-to-left {
     animation: slide-left-small 2s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;

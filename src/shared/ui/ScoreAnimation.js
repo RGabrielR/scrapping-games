@@ -21,26 +21,15 @@ const RESULT_IMAGES = {
   AWFUL: awful,
 };
 
-const ScoreAnimation = ({ result, showAnimation }) => {
+// This component is only mounted when showAnimation is true (via conditional rendering in parent).
+// The CSS animation handles all transforms — no inline style override needed.
+const ScoreAnimation = ({ result }) => {
   const image = RESULT_IMAGES[result];
+  if (!result || !image) return null;
   return (
-    <>
-      {result && (
-        <div
-          className={`result-animation absolute z-30 ${
-            showAnimation ? "animate-result" : ""
-          }`}
-          style={{
-            transformOrigin: "center",
-            transform: showAnimation
-              ? "scale(1) translateX(0)"
-              : "scale(0) translateX(75%)",
-          }}
-        >
-          <Image src={image} className="w-96 top-4 z-20" alt="result icon" />
-        </div>
-      )}
-    </>
+    <div className="result-animation animate-result absolute z-30">
+      <Image src={image} className="w-96 top-4 z-20" alt="result icon" />
+    </div>
   );
 };
 

@@ -47,9 +47,7 @@ const RentPage = () => {
 
       <NavBurguer />
 
-      {showAnimation && (
-        <ScoreAnimation result={result} showAnimation={showAnimation} />
-      )}
+      {showAnimation && <ScoreAnimation result={result} />}
 
       {presentApartment ? (
         <div className="flex flex-col justify-around h-[90%] xl:h-[75%] xl:pt-36">

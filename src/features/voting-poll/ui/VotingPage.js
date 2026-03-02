@@ -44,9 +44,7 @@ const VotingPage = () => {
 
       <NavBurguer />
 
-      {showAnimation && (
-        <ScoreAnimation result={result} showAnimation={showAnimation} />
-      )}
+      {showAnimation && <ScoreAnimation result={result} />}
 
       {deputy ? (
         <section className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-4 px-3 py-8 sm:px-6">
