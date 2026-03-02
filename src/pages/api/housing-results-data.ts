@@ -1,31 +1,28 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import puppeteer from "puppeteer-core";
 import locations from "../../data/locations.json";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const chromium = require("@sparticuz/chromium");
-function chooseRandomElement(array) {
+
+function chooseRandomElement<T>(array: T[]): T {
   const randomIndex = Math.floor(Math.random() * array.length);
   return array[randomIndex];
 }
-async function chooseRandomUrlAndFetch() {
+
+async function chooseRandomUrlAndFetch(): Promise<string[]> {
   try {
     const randomPage = Math.floor(Math.random() * 5) + 1;
     const randomLocation =
       locations[Math.floor(Math.random() * locations.length) - 1];
     const urlToFetch = `https://www.zonaprop.com.ar/departamentos-alquiler-${randomLocation}-orden-publicado-descendente-pagina-${randomPage}.html`;
-    let browser;
-    let page;
-
-    if (!browser) {
-      browser = await puppeteer.launch({
-        args: chromium.args,
-        executablePath:
-          process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath),
-        headless: true,
-        // ...more config options
-      });
-    }
-    if (!page) {
-      page = await browser.newPage();
-    }
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath:
+        process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath),
+      headless: true,
+    });
+    const page = await browser.newPage();
 
     const client = await page.target().createCDPSession();
     await client.send("Page.setDownloadBehavior", {
@@ -41,7 +38,7 @@ async function chooseRandomUrlAndFetch() {
     await page.goto(urlToFetch);
     console.log("esta en el goto?");
     console.log("la url esta bien?", urlToFetch);
-    await page.waitForSelector(".postings-container"); // here
+    await page.waitForSelector(".postings-container");
     console.log("postingContainer???");
     const elements = await page.$$eval(".postings-container > div", (divs) => {
       return divs.map((div) => div.innerHTML);
@@ -50,22 +47,29 @@ async function chooseRandomUrlAndFetch() {
     return elements;
   } catch (error) {
     console.log("error", error);
+    return [];
   }
 }
-export default async function handler(req, res) {
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     console.log("antes de la function");
-    let elements = await chooseRandomUrlAndFetch();
-    const apartmentData = {};
-    let element, matches, uniqueUrls, priceMatch, metersMatch;
-    let arrayOfImages = new Set();
+    const elements = await chooseRandomUrlAndFetch();
+    const apartmentData: Record<string, unknown> = {};
+    let element: string,
+      matches: RegExpMatchArray | null,
+      uniqueUrls: Set<string>,
+      priceMatch: RegExpMatchArray | null,
+      metersMatch: RegExpMatchArray | null;
+    const arrayOfImages = new Set<string>();
     const maxRetries = 10;
     let retries = 0;
     console.log("entro");
 
     do {
       if (retries >= maxRetries) {
-        elements = await chooseRandomUrlAndFetch();
+        const newElements = await chooseRandomUrlAndFetch();
+        elements.splice(0, elements.length, ...newElements);
         retries = 0;
       }
       element = chooseRandomElement(elements);
@@ -74,8 +78,8 @@ export default async function handler(req, res) {
         /<div data-qa="POSTING_CARD_PRICE"[^>]*>(.*?)<\/div>/
       );
       uniqueUrls = new Set(
-        matches
-          .map((match) => match.match(/src="([^"]+)"/)[1])
+        (matches ?? [])
+          .map((match) => match.match(/src="([^"]+)"/)![1])
           .filter(
             (url) =>
               !url.includes("Sprite") &&
@@ -88,7 +92,7 @@ export default async function handler(req, res) {
       );
 
       uniqueUrls.forEach((url) => {
-        arrayOfImages.add(url); // Add unique URLs to the set
+        arrayOfImages.add(url);
       });
       metersMatch = element.match(/(\d+)\s*m²/);
       if (metersMatch) {
@@ -97,13 +101,15 @@ export default async function handler(req, res) {
       retries++;
     } while (
       arrayOfImages.size < 3 ||
+      !priceMatch ||
       priceMatch[1].trim().includes("Consultar") ||
+      !metersMatch ||
       parseInt(metersMatch[1].trim()) < 15
     );
     apartmentData.arrayOfImages = Array.from(arrayOfImages);
 
     if (priceMatch) {
-      if (element.includes("USD") || priceMatch < 5000) {
+      if (element!.includes("USD") || (priceMatch as RegExpMatchArray).length < 5) {
         apartmentData.prizeInUSD = `${priceMatch[1].trim()}`;
         const dolarBlueValues = await fetch(
           "https://api.bluelytics.com.ar/v2/latest"
@@ -120,13 +126,13 @@ export default async function handler(req, res) {
       }
     }
 
-    const locationMatch = element.match(
+    const locationMatch = element!.match(
       /<div data-qa="POSTING_CARD_LOCATION"[^>]*>(.*?)<\/div>/
     );
     if (locationMatch) {
       apartmentData.location = locationMatch[1].trim();
     }
-    const descriptionMatch = element.match(
+    const descriptionMatch = element!.match(
       /<div data-qa="POSTING_CARD_DESCRIPTION"[^>]*>(.*?)<\/div>/
     );
     if (descriptionMatch) {

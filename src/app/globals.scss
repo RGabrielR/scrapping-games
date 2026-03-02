@@ -577,3 +577,64 @@ input[type="number"] {
     opacity: 0;
   }
 }
+
+// Congress building loader (voting-poll)
+.congress-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.congress-building {
+  width: 160px;
+  height: 130px;
+  color: #1e3a8a;
+  animation: congress-float 3s ease-in-out infinite;
+  filter: drop-shadow(0 8px 20px rgba(30, 58, 138, 0.25));
+}
+
+.congress-dots {
+  display: flex;
+  gap: 0.5rem;
+
+  span {
+    width: 10px;
+    height: 10px;
+    background: #1e3a8a;
+    border-radius: 50%;
+    animation: congress-bounce 1.4s ease-in-out infinite;
+    opacity: 0.4;
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+@keyframes congress-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes congress-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
