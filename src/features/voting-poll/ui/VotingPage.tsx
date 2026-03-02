@@ -70,9 +70,7 @@ const VotingPage = () => {
               {"\u00BFC\u00F3mo vot\u00F3?"}
             </h1>
             <p className="max-w-2xl text-pretty text-sm text-slate-600 sm:text-base">
-              {
-                "Pon\u00E9 a prueba tu intuici\u00F3n y descubr\u00ED c\u00F3mo se pronunciaron las y los diputados en votaciones clave del Congreso."
-              }
+              {"Pon\u00E9 a prueba tu intuici\u00F3n y descubr\u00ED c\u00F3mo se pronunciaron diputadas, diputados y senadores en votaciones clave del Congreso."}
             </p>
           </div>
 
@@ -84,6 +82,9 @@ const VotingPage = () => {
                   classesToAdd="mx-auto aspect-[3/4] w-full max-w-[130px] rounded-2xl border border-slate-100 object-cover shadow-lg"
                 />
                 <div className="flex w-full flex-wrap items-center justify-center gap-1.5 text-center">
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-white ${deputy.chamber === "senadores" ? "bg-purple-700" : "bg-blue-700"}`}>
+                    {deputy.chamber === "senadores" ? "Senado" : "Diputados"}
+                  </span>
                   <ImageDescription data={[deputy.party, deputy.province]} />
                 </div>
               </div>
@@ -145,6 +146,9 @@ const VotingPage = () => {
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-3xl flex-col items-center justify-center gap-6 px-4 py-10 text-center">
           {lastDeputy && (
             <div className="fade-in w-full rounded-3xl border border-slate-200 bg-white/95 px-5 py-7 text-pretty text-base text-slate-700 shadow-xl shadow-slate-300/30 backdrop-blur-sm sm:px-8 sm:py-9">
+              <span className={`mr-1.5 inline-block rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white ${lastDeputy.chamber === "senadores" ? "bg-purple-700" : "bg-blue-700"}`}>
+                {lastDeputy.chamber === "senadores" ? "Senado" : "Diputados"}
+              </span>
               <span className="font-semibold text-blue-900">{lastDeputy?.name}</span>{" "}
               {"en"}{" "}
               <span className="font-semibold text-blue-900">

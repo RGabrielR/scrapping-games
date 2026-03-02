@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { scrapeRandomDeputyVote } from "@/infrastructure/scrapers/votingScraper";
+import { scrapeRandomLegislatorVote } from "@/infrastructure/scrapers/votingScraper";
 import type { Deputy } from "@/types";
 
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<Deputy | { error: string }>
 ) {
   try {
-    const deputy = await scrapeRandomDeputyVote();
+    const deputy = await scrapeRandomLegislatorVote();
     res.status(200).json(deputy);
   } catch (error) {
     console.error("Error scraping deputy vote:", error);

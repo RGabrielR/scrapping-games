@@ -6,6 +6,7 @@ export interface Deputy {
   photoLink: string | undefined;
   project: string;
   moreInfo: string;
+  chamber: "diputados" | "senadores";
 }
 
 export interface ApartmentData {
