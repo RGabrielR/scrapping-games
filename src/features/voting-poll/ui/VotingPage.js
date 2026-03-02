@@ -144,7 +144,7 @@ const VotingPage = () => {
       ) : (
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-3xl flex-col items-center justify-center gap-6 px-4 py-10 text-center">
           {lastDeputy && (
-            <div className="enter-right-to-left w-full rounded-3xl border border-slate-200 bg-white/95 px-5 py-7 text-pretty text-base text-slate-700 shadow-xl shadow-slate-300/30 backdrop-blur-sm sm:px-8 sm:py-9">
+            <div className="fade-in w-full rounded-3xl border border-slate-200 bg-white/95 px-5 py-7 text-pretty text-base text-slate-700 shadow-xl shadow-slate-300/30 backdrop-blur-sm sm:px-8 sm:py-9">
               <span className="font-semibold text-blue-900">{lastDeputy?.name}</span>{" "}
               {"en"}{" "}
               <span className="font-semibold text-blue-900">
@@ -174,7 +174,7 @@ const VotingPage = () => {
               <a
                 target="_blank"
                 href={lastDeputy.moreInfo}
-                className="opacity-fade w-full max-w-[14rem] rounded-full bg-blue-900 px-5 py-2.5 text-center text-xs font-semibold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-800 hover:text-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 sm:text-sm"
+                className="fade-in w-full max-w-[14rem] rounded-full bg-blue-900 px-5 py-2.5 text-center text-xs font-semibold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-800 hover:text-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 sm:text-sm"
               >
                 {"M\u00E1s informaci\u00F3n"}
               </a>
