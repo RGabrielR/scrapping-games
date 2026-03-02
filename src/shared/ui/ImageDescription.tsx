@@ -1,4 +1,8 @@
-const ImageDescription = ({ data }) => {
+interface ImageDescriptionProps {
+  data: string[];
+}
+
+const ImageDescription = ({ data }: ImageDescriptionProps) => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2 sm:items-start">
       {data.map((item, index) => (
