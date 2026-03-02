@@ -1,7 +1,9 @@
 import puppeteer from "puppeteer-core";
 import locations from "@/data/locations.json";
 import { usdToArs } from "../converters/currencyConverter";
+import type { ApartmentData } from "@/types";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const chromium = require("@sparticuz/chromium");
 
 const MIN_IMAGES = 3;
@@ -9,11 +11,11 @@ const MIN_METERS = 15;
 const MAX_RETRIES = 10;
 const MAX_TIMEOUT_MS = 30000;
 
-const extractImages = (html) => {
+const extractImages = (html: string): Set<string> => {
   const matches = html.match(/src="([^"]+)"/g) || [];
   return new Set(
     matches
-      .map((m) => m.match(/src="([^"]+)"/)[1])
+      .map((m) => m.match(/src="([^"]+)"/)![1])
       .filter(
         (url) =>
           !url.includes("Sprite") &&
@@ -26,19 +28,19 @@ const extractImages = (html) => {
   );
 };
 
-const extractMeters = (html) => {
+const extractMeters = (html: string): number => {
   const match = html.match(/(\d+)\s*m²/);
   return match ? parseInt(match[1]) : 0;
 };
 
-const extractDataQaContent = (html, qaValue) => {
+const extractDataQaContent = (html: string, qaValue: string): string | null => {
   const match = html.match(
     new RegExp(`<div data-qa="${qaValue}"[^>]*>(.*?)<\\/div>`)
   );
   return match ? match[1].trim() : null;
 };
 
-const fetchPageElements = async () => {
+const fetchPageElements = async (): Promise<string[]> => {
   const randomPage = Math.floor(Math.random() * 5) + 1;
   const randomLocation =
     locations[Math.floor(Math.random() * locations.length) - 1];
@@ -65,12 +67,7 @@ const fetchPageElements = async () => {
   return elements;
 };
 
-/**
- * Scrapes a valid apartment listing from Zonaprop.
- * Retries until it finds a listing with enough images, a real price, and valid m².
- * @returns {Promise<object>} Apartment data ready to be saved via rentRepository
- */
-export const scrapeValidApartment = async () => {
+export const scrapeValidApartment = async (): Promise<ApartmentData> => {
   const elements = await fetchPageElements();
   const startTime = Date.now();
   let retries = 0;
@@ -94,12 +91,12 @@ export const scrapeValidApartment = async () => {
     }
 
     const rawPrice = priceMatch[1].trim();
-    const apartment = {
+    const apartment: ApartmentData = {
       arrayOfImages: Array.from(images),
       meters: `${meters} mts.`,
-      location: extractDataQaContent(element, "POSTING_CARD_LOCATION") || "",
+      location: extractDataQaContent(element, "POSTING_CARD_LOCATION") ?? "",
       description:
-        extractDataQaContent(element, "POSTING_CARD_DESCRIPTION") || "",
+        extractDataQaContent(element, "POSTING_CARD_DESCRIPTION") ?? "",
     };
 
     const isUSD = element.includes("USD") || rawPrice.length < 5;

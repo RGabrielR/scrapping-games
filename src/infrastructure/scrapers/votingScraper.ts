@@ -1,18 +1,15 @@
-const cheerio = require("cheerio");
-import lawProjects from "@/data/lawProjects.json" assert { type: "json" };
+import * as cheerio from "cheerio";
+import lawProjects from "@/data/lawProjects.json";
+import type { Deputy } from "@/types";
 
-/**
- * Scrapes a random deputy's vote from a randomly selected law project.
- * @returns {Promise<{ name, party, province, vote, photoLink, project, moreInfo }>}
- */
-export const scrapeRandomDeputyVote = async () => {
+export const scrapeRandomDeputyVote = async (): Promise<Deputy> => {
   const randomIndex = Math.floor(Math.random() * lawProjects.length);
   const project = lawProjects[randomIndex];
 
   const html = await fetch(project.link).then((r) => r.text());
   const $ = cheerio.load(html);
 
-  const deputies = [];
+  const deputies: Deputy[] = [];
   $("table tr").each((_, row) => {
     const $tds = $(row).find("td");
     const name = $tds.eq(1).text().trim();
