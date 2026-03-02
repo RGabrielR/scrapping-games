@@ -1,27 +1,23 @@
-import { housingResults } from "models/housing-result";
+import { scrapeValidApartment } from "@/infrastructure/scrapers/rentScraper";
+import { saveApartment } from "@/infrastructure/db/rentRepository";
 
-// Function to populate the schema with a delay
-async function populateSchemaWithDelay() {
+const MAX_EXECUTIONS = 5;
+const DELAY_MS = 40000;
+
+async function populateWithDelay() {
   try {
-    const maxExecutions = 5; // Number of times to execute
-    const delayBetweenExecutions = 40000; // 40-second delay (adjust as needed)
-
-    for (let i = 0; i < maxExecutions; i++) {
-      await housingResults.populateOneResult();
+    for (let i = 0; i < MAX_EXECUTIONS; i++) {
+      const apartment = await scrapeValidApartment();
+      await saveApartment(apartment);
       console.log(`Execution ${i + 1} completed.`);
-      if (i < maxExecutions - 1) {
-        // Delay between executions, except for the last one
-        await new Promise((resolve) =>
-          setTimeout(resolve, delayBetweenExecutions)
-        );
+      if (i < MAX_EXECUTIONS - 1) {
+        await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
       }
     }
-
     console.log("All executions completed.");
   } catch (error) {
     console.error("An error occurred:", error);
   }
 }
 
-// Start the population process
-populateSchemaWithDelay();
+populateWithDelay();
