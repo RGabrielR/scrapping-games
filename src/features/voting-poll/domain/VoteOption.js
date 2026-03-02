@@ -1,0 +1,6 @@
+export const VoteOption = {
+  AFIRMATIVO: "AFIRMATIVO",
+  NEGATIVO: "NEGATIVO",
+  AUSENTE: "AUSENTE",
+  ABSTENCION: "ABSTENCION",
+};
