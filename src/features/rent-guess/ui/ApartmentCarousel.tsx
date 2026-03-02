@@ -1,11 +1,11 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 
-/**
- * Renders a looping image carousel for apartment photos.
- * @param {{ images: string[] }} props
- */
-const ApartmentCarousel = ({ images }) => {
+interface ApartmentCarouselProps {
+  images: string[];
+}
+
+const ApartmentCarousel = ({ images }: ApartmentCarouselProps) => {
   return (
     <Splide aria-label="Fotos del departamento" data-splide='{"type":"loop"}'>
       {images.map((image, index) => (

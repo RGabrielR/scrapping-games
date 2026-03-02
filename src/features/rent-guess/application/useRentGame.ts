@@ -2,27 +2,27 @@
 import { useState, useEffect } from "react";
 import { evaluateGuess } from "../domain/rentScoring";
 import { parseFormattedNumber } from "@/shared/lib/numberFormat";
+import type { ApartmentData, ApartmentWithResult } from "@/types";
 
 const SCORE_TICK_MS = 10;
 const MODAL_DELAY_MS = 2000;
 const NEXT_ROUND_DELAY_MS = 2100;
 
-const fetchApartment = () =>
+const fetchApartment = (): Promise<ApartmentData> =>
   fetch("/api/random-guess").then((r) => r.json());
 
 export const useRentGame = () => {
-  const [presentApartment, setPresentApartment] = useState(null);
-  const [nextApartment, setNextApartment] = useState(null);
-  const [lastApartment, setLastApartment] = useState(null);
-  const [result, setResult] = useState(null);
+  const [presentApartment, setPresentApartment] = useState<ApartmentData | null>(null);
+  const [nextApartment, setNextApartment] = useState<ApartmentData | null>(null);
+  const [lastApartment, setLastApartment] = useState<ApartmentWithResult | null>(null);
+  const [result, setResult] = useState<string | null>(null);
   const [score, setScore] = useState(0);
-  const [targetScore, setTargetScore] = useState(null);
+  const [targetScore, setTargetScore] = useState<number | null>(null);
   const [showAnimation, setShowAnimation] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [guess, setGuess] = useState("");
 
-  // Pre-fetch present and next apartments on mount
   useEffect(() => {
     Promise.all([fetchApartment(), fetchApartment()]).then(([present, next]) => {
       setPresentApartment(present);
@@ -30,7 +30,6 @@ export const useRentGame = () => {
     });
   }, []);
 
-  // Score counter animation
   useEffect(() => {
     if (targetScore === null) return;
     const increment = targetScore > score ? 1 : -1;
@@ -50,15 +49,12 @@ export const useRentGame = () => {
     return () => clearInterval(interval);
   }, [score, targetScore]);
 
-  /**
-   * Evaluates the current guess and advances to the next round.
-   */
   const submitGuess = () => {
     if (!guess || !presentApartment) return;
 
     const guessedPrice = parseFormattedNumber(guess);
     const { result: newResult, delta, percentDiff, title, feedbackMessage } =
-      evaluateGuess(guessedPrice, presentApartment.prizeInARS);
+      evaluateGuess(guessedPrice, presentApartment.prizeInARS ?? "");
 
     setResult(newResult);
     setTargetScore(score + delta);

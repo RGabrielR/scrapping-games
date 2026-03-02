@@ -1,23 +1,26 @@
 import { Button, Modal } from "flowbite-react";
 import { formatThousands } from "@/shared/lib/numberFormat";
+import type { ApartmentData } from "@/types";
 
-/**
- * Shows a hint modal with the apartment description, masking the price.
- * Note: `presentApartment.description` is a plain string (decoded at the repository layer).
- */
-const HintModal = ({ presentApartment, show, onClose }) => {
+interface HintModalProps {
+  presentApartment: ApartmentData;
+  show: boolean;
+  onClose: () => void;
+}
+
+const HintModal = ({ presentApartment, show, onClose }: HintModalProps) => {
   if (!presentApartment) return null;
 
   const formattedARS = formatThousands(
-    presentApartment.prizeInARS?.replace(/[^0-9]/g, "")
+    presentApartment.prizeInARS?.replace(/[^0-9]/g, "") ?? ""
   );
   const formattedUSD = presentApartment.prizeInUSD
-    ? formatThousands(presentApartment.prizeInUSD?.replace(/[^0-9]/g, ""))
+    ? formatThousands(presentApartment.prizeInUSD?.replace(/[^0-9]/g, "") ?? "")
     : null;
 
   const maskedDescription = (presentApartment.description || "")
     .replace(presentApartment.prizeInUSD || "", "XXXXXX")
-    .replace(presentApartment.prizeInARS, "XXXXXX")
+    .replace(presentApartment.prizeInARS ?? "", "XXXXXX")
     .replace(formattedARS, "XXXXXX")
     .replace(formattedUSD || "", "XXXXXX");
 

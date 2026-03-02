@@ -1,12 +1,15 @@
 import { formatThousands } from "@/shared/lib/numberFormat";
 
-/**
- * Input field for the user's rent price guess, with thousands formatting,
- * a hint button, and a submit button.
- * @param {{ value: string, onChange: (v: string) => void, onSubmit: () => void, onHint: () => void }} props
- */
-const PriceInput = ({ value, onChange, onSubmit, onHint }) => {
-  const handleChange = (e) => onChange(formatThousands(e.target.value));
+interface PriceInputProps {
+  value: string;
+  onChange: (v: string) => void;
+  onSubmit: () => void;
+  onHint: () => void;
+}
+
+const PriceInput = ({ value, onChange, onSubmit, onHint }: PriceInputProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    onChange(formatThousands(e.target.value));
 
   return (
     <div className="flex flex-row justify-center items-center md:mt-0">
@@ -32,7 +35,7 @@ const PriceInput = ({ value, onChange, onSubmit, onHint }) => {
           autoComplete="off"
           onChange={handleChange}
           value={value}
-          style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
+          style={{ WebkitAppearance: "none", MozAppearance: "textfield" } as React.CSSProperties}
         />
         <div className="absolute inset-y-0 left-0 top-[-0.1rem] flex items-center rounded-sm pointer-events-none z-20 pl-4">
           <span className="text-gray-500 text-xl md:text-3xl">$</span>

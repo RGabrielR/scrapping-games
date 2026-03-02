@@ -1,26 +1,28 @@
 import { Button, Modal } from "flowbite-react";
 import { formatThousands } from "@/shared/lib/numberFormat";
+import type { ApartmentWithResult } from "@/types";
 
-/**
- * Shows the result modal after the user submits a guess.
- * `lastApartment` must include: title, feedbackMessage, guess, prizeInUSD, prizeInARS, percentDiff.
- */
-const ResultModal = ({ lastApartment, show, onClose }) => {
+interface ResultModalProps {
+  lastApartment: ApartmentWithResult | null;
+  show: boolean;
+  onClose: () => void;
+}
+
+const ResultModal = ({ lastApartment, show, onClose }: ResultModalProps) => {
   if (!lastApartment) return null;
 
-  const { title, feedbackMessage, guess, prizeInUSD, prizeInARS } =
-    lastApartment;
+  const { title, feedbackMessage, guess, prizeInUSD, prizeInARS } = lastApartment;
 
-  let priceContext;
+  let priceContext: string;
   if (prizeInUSD) {
     priceContext = `El precio esta en ${formatThousands(
       prizeInUSD
     )} Dólares, pero al cambio del día de la fecha equivale a $${formatThousands(
-      prizeInARS?.replace("ARS ", "")
+      prizeInARS?.replace("ARS ", "") ?? ""
     )} ARS. `;
   } else {
     priceContext = `El precio se encuentra en ${formatThousands(
-      prizeInARS?.replace("ARS ", "")
+      prizeInARS?.replace("ARS ", "") ?? ""
     )} ARS, se oferta a pesos argentinos. `;
   }
 
