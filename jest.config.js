@@ -7,4 +7,5 @@ module.exports = createJestConfig({
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  testMatch: ["**/__tests__/**/*.test.ts"],
 });
