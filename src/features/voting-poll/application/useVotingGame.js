@@ -5,6 +5,9 @@ import { evaluateVote } from "../domain/votingScoring";
 const RESULT_DISPLAY_MS = 3500;
 const FETCH_DELAY_MS = 500;
 const SCORE_TICK_MS = 10;
+// Minimum time the loading/info screen stays visible after a vote,
+// so the user has time to read the last deputy's result.
+const MIN_LOADING_DISPLAY_MS = 2500;
 
 export const useVotingGame = () => {
   const [deputy, setDeputy] = useState(null);
@@ -14,11 +17,21 @@ export const useVotingGame = () => {
   const [targetScore, setTargetScore] = useState(null);
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const loadNextDeputy = () => {
+  /**
+   * Fetches the next deputy and shows it only after MIN_LOADING_DISPLAY_MS
+   * has elapsed since the loading screen appeared.
+   * @param {number} loadingStartedAt - timestamp when the loading screen became visible.
+   *   Defaults to "already past minimum" so the initial load shows immediately.
+   */
+  const loadNextDeputy = (loadingStartedAt = Date.now() - MIN_LOADING_DISPLAY_MS) => {
     setTimeout(() => {
       fetch("/api/results-data")
         .then((r) => r.json())
-        .then(setDeputy)
+        .then((data) => {
+          const elapsed = Date.now() - loadingStartedAt;
+          const remaining = Math.max(0, MIN_LOADING_DISPLAY_MS - elapsed);
+          setTimeout(() => setDeputy(data), remaining);
+        })
         .catch((err) => console.error("Error fetching deputy:", err));
     }, FETCH_DELAY_MS);
   };
@@ -63,7 +76,7 @@ export const useVotingGame = () => {
       setResult(null);
       setDeputy(null);
       setShowAnimation(false);
-      loadNextDeputy();
+      loadNextDeputy(Date.now()); // loading screen starts now
     }, RESULT_DISPLAY_MS);
   };
 
