@@ -7,39 +7,30 @@ const FALLBACK_IMAGE =
 interface BlurImageProps {
   image: string | undefined;
   classesToAdd?: string;
+  wrapperClass?: string;
 }
 
-export default function BlurImage({ image, classesToAdd }: BlurImageProps) {
+export default function BlurImage({ image, classesToAdd, wrapperClass }: BlurImageProps) {
   const [isLoading, setLoading] = useState(true);
   const [imageSrc, setImageSrc] = useState(image ?? FALLBACK_IMAGE);
-  const [imageSize, setImageSize] = useState(250);
 
   useEffect(() => {
-    setImageSize(window.innerWidth > 768 ? 300 : 250);
-  }, []);
-
-  useEffect(() => {
-    if (!image) {
-      setImageSrc(FALLBACK_IMAGE);
-      return;
-    }
-    const imgElement = new Image();
-    imgElement.src = image;
-    imgElement.onload = () => setImageSrc(image);
-    imgElement.onerror = () => setImageSrc(FALLBACK_IMAGE);
+    setImageSrc(image ?? FALLBACK_IMAGE);
+    setLoading(true);
   }, [image]);
 
   return (
     <a href="#" className="group">
-      <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg xl:aspect-w-7 xl:aspect-h-8">
+      <div className={`overflow-hidden ${wrapperClass ?? "aspect-w-1 aspect-h-1 w-full xl:aspect-w-7 xl:aspect-h-8"}`}>
         <NextImage
           alt=""
           src={imageSrc}
-          width={imageSize}
-          height={imageSize}
-          style={{ objectFit: "cover" }}
+          // Portrait dimensions matching the 3:4 display ratio.
+          // Next.js uses these to serve a properly-sized optimized image.
+          width={210}
+          height={280}
           className={`
-            duration-700 ease-in-out group-hover:opacity-75 ${classesToAdd ?? ""}
+            h-full w-full object-cover duration-700 ease-in-out group-hover:opacity-75 ${classesToAdd ?? ""}
             ${
               isLoading
                 ? "scale-110 blur-2xl grayscale"
@@ -47,6 +38,9 @@ export default function BlurImage({ image, classesToAdd }: BlurImageProps) {
             }
           `}
           onLoad={() => setLoading(false)}
+          onError={() => {
+            if (imageSrc !== FALLBACK_IMAGE) setImageSrc(FALLBACK_IMAGE);
+          }}
         />
       </div>
     </a>
