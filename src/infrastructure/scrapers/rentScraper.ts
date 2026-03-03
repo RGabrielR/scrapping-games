@@ -1,10 +1,6 @@
-import { execFile } from "child_process";
-import { promisify } from "util";
 import locations from "@/data/locations.json";
 import { usdToArs } from "../converters/currencyConverter";
 import type { ApartmentData } from "@/types";
-
-const execFileAsync = promisify(execFile);
 
 const MIN_IMAGES = 3;
 const MIN_METERS = 15;
@@ -14,61 +10,87 @@ const FETCH_HEADERS = {
   "User-Agent":
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
   Accept:
-    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
   "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
 };
 
-// Converts avisoId (e.g. "58488356") to the path segments used in CDN URLs.
-// ZonaProp pads the ID to 10 digits and splits into 2-digit chunks:
-//   "58488356" → "00/58/48/83/56"
-const avisoIdToPath = (avisoId: string): string =>
-  avisoId
-    .padStart(10, "0")
-    .match(/.{2}/g)!
-    .join("/");
-
-const parseSchemas = (html: string) => {
-  return [...html.matchAll(/<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
-    .map((m) => {
-      try {
-        return JSON.parse(m[1]) as Record<string, unknown>;
-      } catch {
-        return null;
-      }
-    })
-    .filter((s): s is Record<string, unknown> => s !== null);
+// ArgenProp URL: /departamento-alquiler-en-palermo  (page 1 = no suffix)
+//                /departamento-alquiler-en-palermo-pagina-2
+const buildUrl = (location: string, page: number): string => {
+  const base = `https://www.argenprop.com/departamento-alquiler-en-${location}`;
+  return page === 1 ? base : `${base}-pagina-${page}`;
 };
 
-interface ListingEntry {
-  description?: string;
-  url?: string;
-  contentLocation?: { name?: string };
+interface ParsedListing {
+  location: string;
+  meters: number;
+  price: string;
+  isUSD: boolean;
+  description: string;
+  images: string[];
 }
 
-const buildUrl = (location: string, page: number): string => {
-  // ZonaProp 301-redirects the -pagina-1 variant to the base URL.
-  // Use the canonical base URL for page 1 to avoid that redirect.
-  const base = `https://www.zonaprop.com.ar/departamentos-alquiler-${location}-orden-publicado-descendente`;
-  return page === 1 ? `${base}.html` : `${base}-pagina-${page}.html`;
-};
+const parseListings = (html: string): ParsedListing[] => {
+  // Each listing is wrapped in: class="listing__item " id="NNNNN"
+  const itemPositions = [
+    ...html.matchAll(/class="listing__item [^"]*" id="\d+"/g),
+  ].map((m) => m.index!);
 
-// Node.js native fetch is blocked by Cloudflare's JA3 TLS fingerprint detection.
-// Spawning curl uses a different TLS stack (Schannel on Windows, OpenSSL on Linux)
-// that passes Cloudflare's bot check.
-const fetchHtml = async (url: string): Promise<string> => {
-  const args = [
-    "-s", "-L", "--compressed", "--max-time", "30",
-    "-H", `User-Agent: ${FETCH_HEADERS["User-Agent"]}`,
-    "-H", `Accept: ${FETCH_HEADERS.Accept}`,
-    "-H", `Accept-Language: ${FETCH_HEADERS["Accept-Language"]}`,
-    "-H", "Cache-Control: max-age=0",
-    "-H", "Upgrade-Insecure-Requests: 1",
-    url,
-  ];
-  const { stdout } = await execFileAsync("curl", args, {
-    maxBuffer: 20 * 1024 * 1024,
-  });
-  return stdout;
+  const results: ParsedListing[] = [];
+
+  for (let i = 0; i < itemPositions.length; i++) {
+    const block = html.slice(
+      itemPositions[i],
+      itemPositions[i + 1] ?? itemPositions[i] + 8000
+    );
+
+    // --- Location ---
+    // "Departamento en Alquiler en NEIGHBORHOOD, BARRIO"
+    const locationMatch = block.match(
+      /card__title--primary[^>]*>\s*(?:Departamento [^<]*en\s+)?([^<,]+?)(?:,\s*[^<]+)?\s*<\/p>/
+    );
+    const location = locationMatch
+      ? locationMatch[1].trim().replace(/Departamento.*?en\s+/i, "").trim()
+      : "";
+
+    // --- Meters ---
+    const metersMatch = block.match(/(\d+)\s*m(?:&#xB2;|²)\s*cubie/i) ??
+      block.match(/(\d+)\s*m(?:&#xB2;|²)/i);
+    const meters = metersMatch ? parseInt(metersMatch[1]) : 0;
+    if (meters < MIN_METERS) continue;
+
+    // --- Price ---
+    const priceBlock = block.match(/card__price[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? "";
+    const rawPrice = priceBlock
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&plus;[\s\S]*/g, "")  // strip "+ expenses" part
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!rawPrice || rawPrice.toLowerCase().includes("consultar")) continue;
+
+    const isUSD = /u\$s|usd/i.test(rawPrice);
+
+    // --- Description ---
+    const descMatch = block.match(/card__info[^>]*>\s*([\s\S]*?)\s*<\/p>/);
+    const description = descMatch
+      ? descMatch[1].replace(/<[^>]+>/g, "").trim()
+      : "";
+
+    // --- Images (replace _u_small with _u_large for better quality) ---
+    const rawImages = [
+      ...block.matchAll(
+        /(?:src|data-src)="(https:\/\/www\.argenprop\.com\/static-content\/\d+\/[a-f0-9-]+_u_small\.jpg)"/g
+      ),
+    ].map((m) => m[1].replace("_u_small", "_u_large"));
+
+    const images = [...new Set(rawImages)];
+    if (images.length < MIN_IMAGES) continue;
+
+    results.push({ location, meters, price: rawPrice, isUSD, description, images });
+  }
+
+  return results;
 };
 
 const scrapeOnePage = async (): Promise<ApartmentData> => {
@@ -76,89 +98,38 @@ const scrapeOnePage = async (): Promise<ApartmentData> => {
   const location = locations[Math.floor(Math.random() * locations.length)];
   const url = buildUrl(location, page);
 
-  const html = await fetchHtml(url);
+  const response = await fetch(url, { headers: FETCH_HEADERS });
+  if (!response.ok) throw new Error(`ArgenProp responded ${response.status}`);
+  const html = await response.text();
 
-  const schemas = parseSchemas(html);
+  const listings = parseListings(html);
+  if (listings.length === 0) throw new Error("No valid listings found on page");
 
-  // Apartment schemas hold the name with m² info (same order as listings)
-  const apartments = schemas.filter((s) => s["@type"] === "Apartment") as {
-    name?: string;
-  }[];
+  const picked = listings[Math.floor(Math.random() * listings.length)];
 
-  // RealEstateListing holds description, URL and contentLocation per listing
-  const realEstateListing = schemas.find(
-    (s) => s["@type"] === "RealEstateListing"
-  ) as { mainEntity?: ListingEntry[] } | undefined;
-  const listings: ListingEntry[] = realEstateListing?.mainEntity ?? [];
+  let prizeInARS: string;
+  let prizeInUSD: string | undefined;
 
-  // Prices in page order
-  const prices = [
-    ...html.matchAll(/data-qa="POSTING_CARD_PRICE"[^>]*>([^<]+)</g),
-  ].map((m) => m[1].trim());
-
-  if (listings.length === 0 || prices.length === 0) {
-    throw new Error("No listings found on page");
+  if (picked.isUSD) {
+    const usdAmount = parseInt(
+      picked.price.replace(/[^0-9]/g, ""),
+      10
+    );
+    const arsAmount = await usdToArs(usdAmount);
+    prizeInUSD = picked.price;
+    prizeInARS = `ARS ${arsAmount.toLocaleString("es-AR")}`;
+  } else {
+    prizeInARS = `ARS ${picked.price.replace(/[$\s]/g, "")}`;
   }
 
-  // Build a pool of valid listings and pick one at random
-  const indices = Array.from({ length: listings.length }, (_, i) => i)
-    .sort(() => Math.random() - 0.5); // shuffle to avoid always picking index 0
-
-  for (const i of indices) {
-    const listing = listings[i];
-    const price = prices[i];
-
-    if (!price || price.includes("Consultar") || !listing?.url) continue;
-
-    const metersMatch = apartments[i]?.name?.match(/(\d+)m²/);
-    const meters = metersMatch ? parseInt(metersMatch[1]) : 0;
-    if (meters < MIN_METERS) continue;
-
-    const avisoId = listing.url.match(/-(\d+)\.html$/)?.[1];
-    if (!avisoId) continue;
-
-    const avisoPath = avisoIdToPath(avisoId);
-
-    // Collect all 720×532 images for this listing, stripping query params
-    const imageSet = new Set<string>();
-    for (const [, raw] of html.matchAll(
-      /https:\/\/imgar\.zonapropcdn\.com\/avisos\/[^"'\s]+\.jpg(?:\?[^"'\s]*)?/g
-    )) {
-      const clean = raw.split("?")[0];
-      if (clean.includes(avisoPath) && clean.includes("720x532")) {
-        imageSet.add(clean);
-      }
-    }
-
-    if (imageSet.size < MIN_IMAGES) continue;
-
-    const isUSD = price.includes("USD");
-    let prizeInARS: string;
-    let prizeInUSD: string | undefined;
-
-    if (isUSD) {
-      const usdAmount = parseInt(
-        price.replace("USD ", "").replace(/\./g, ""),
-        10
-      );
-      const arsAmount = await usdToArs(usdAmount);
-      prizeInUSD = price;
-      prizeInARS = `ARS ${arsAmount.toLocaleString("es-AR")}`;
-    } else {
-      prizeInARS = `ARS ${price.replace("$ ", "")}`;
-    }
-
-    return {
-      arrayOfImages: [...imageSet],
-      meters: `${meters} mts.`,
-      location: listing.contentLocation?.name ?? location,
-      description: listing.description ?? "",
-      prizeInARS,
-      prizeInUSD,
-    };
-  }
-
-  throw new Error("No valid apartment found on this page");
+  return {
+    arrayOfImages: picked.images,
+    meters: `${picked.meters} mts.`,
+    location: picked.location || location,
+    description: picked.description,
+    prizeInARS,
+    prizeInUSD,
+  };
 };
 
 export const scrapeValidApartment = async (): Promise<ApartmentData> => {
