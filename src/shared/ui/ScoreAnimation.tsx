@@ -24,13 +24,14 @@ const RESULT_IMAGES: Record<string, StaticImageData> = {
 
 interface ScoreAnimationProps {
   result: string | null;
+  onAnimationEnd?: () => void;
 }
 
-const ScoreAnimation = ({ result }: ScoreAnimationProps) => {
+const ScoreAnimation = ({ result, onAnimationEnd }: ScoreAnimationProps) => {
   const image = result ? RESULT_IMAGES[result] : undefined;
   if (!result || !image) return null;
   return (
-    <div className="result-animation animate-result absolute z-30">
+    <div className="result-animation animate-result absolute z-30" onAnimationEnd={onAnimationEnd}>
       <Image src={image} className="w-96 top-4 z-20" alt="result icon" />
     </div>
   );

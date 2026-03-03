@@ -1,13 +1,29 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { evaluateVote } from "../domain/votingScoring";
 import type { Deputy } from "@/types";
 
-const RESULT_DISPLAY_MS = 3500;
-const FETCH_DELAY_MS = 500;
 const SCORE_TICK_MS = 10;
-const MIN_LOADING_DISPLAY_MS = 2500;
+const MIN_LOADING_DISPLAY_MS = 2000;
 const FETCH_TIMEOUT_MS = 12000;
+
+const isValidDeputyPayload = (value: unknown): value is Deputy => {
+  if (!value || typeof value !== "object") return false;
+
+  const candidate = value as Deputy;
+  const hasValidChamber =
+    candidate.chamber === "diputados" || candidate.chamber === "senadores";
+
+  return (
+    typeof candidate.name === "string" &&
+    candidate.name.trim().length > 0 &&
+    typeof candidate.project === "string" &&
+    candidate.project.trim().length > 0 &&
+    typeof candidate.vote === "string" &&
+    candidate.vote.trim().length > 0 &&
+    hasValidChamber
+  );
+};
 
 export const useVotingGame = () => {
   const [deputy, setDeputy] = useState<Deputy | null>(null);
@@ -18,29 +34,70 @@ export const useVotingGame = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [fetchError, setFetchError] = useState(false);
 
-  const loadNextDeputy = (loadingStartedAt = Date.now() - MIN_LOADING_DISPLAY_MS) => {
+  // pendingDeputyRef: holds the fetched deputy while waiting for the loader to appear.
+  // loadingStartRef: timestamp of when the loader became visible (set in handleAnimationEnd / retry).
+  // Both refs are needed so that whichever of the two events (fetch completion vs loader appearance)
+  // happens last can trigger the minimum-wait timer correctly.
+  const pendingDeputyRef = useRef<Deputy | null>(null);
+  const loadingStartRef = useRef<number | null>(null);
+
+  // Attempts to show the pending deputy respecting MIN_LOADING_DISPLAY_MS.
+  // Called by both the fetch completion handler and handleAnimationEnd,
+  // so whichever arrives second will actually schedule the state update.
+  const tryShowPendingDeputy = () => {
+    const data = pendingDeputyRef.current;
+    const start = loadingStartRef.current;
+    if (!data || start === null) return;
+
+    pendingDeputyRef.current = null;
+    loadingStartRef.current = null;
+    const remaining = Math.max(0, MIN_LOADING_DISPLAY_MS - (Date.now() - start));
+    setTimeout(() => {
+      setDeputy(data);
+      setFetchError(false);
+    }, remaining);
+  };
+
+  const fetchNextDeputy = (onSuccess: (data: Deputy) => void) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-    setTimeout(() => {
-      fetch("/api/results-data", { signal: controller.signal })
-        .then((r) => r.json())
-        .then((data: Deputy) => {
-          clearTimeout(timeoutId);
-          const elapsed = Date.now() - loadingStartedAt;
-          const remaining = Math.max(0, MIN_LOADING_DISPLAY_MS - elapsed);
-          setTimeout(() => setDeputy(data), remaining);
-        })
-        .catch((err: unknown) => {
-          clearTimeout(timeoutId);
-          console.error("Error fetching deputy:", err);
-          setFetchError(true);
-        });
-    }, FETCH_DELAY_MS);
+    fetch("/api/results-data", { signal: controller.signal })
+      .then(async (r) => {
+        const payload: unknown = await r.json();
+        if (!r.ok) {
+          const errorMessage =
+            payload &&
+            typeof payload === "object" &&
+            "error" in payload &&
+            typeof (payload as { error?: unknown }).error === "string"
+              ? (payload as { error: string }).error
+              : "Failed to fetch voting data";
+          throw new Error(errorMessage);
+        }
+        if (!isValidDeputyPayload(payload)) {
+          throw new Error("Invalid deputy payload");
+        }
+        return payload;
+      })
+      .then((data: Deputy) => {
+        clearTimeout(timeoutId);
+        onSuccess(data);
+      })
+      .catch((err: unknown) => {
+        clearTimeout(timeoutId);
+        console.error("Error fetching deputy:", err);
+        setDeputy(null);
+        setFetchError(true);
+      });
   };
 
   useEffect(() => {
-    loadNextDeputy();
+    // Initial load: show as soon as data arrives, no minimum wait.
+    fetchNextDeputy((data) => {
+      setDeputy(data);
+      setFetchError(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -69,19 +126,32 @@ export const useVotingGame = () => {
     setResult(correct ? "CORRECT" : "INCORRECT");
     setTargetScore(score + delta);
     setShowAnimation(true);
+    // Fetch runs in parallel with the animation so the data is ready
+    // (or nearly ready) by the time the loader appears.
+    fetchNextDeputy((data) => {
+      pendingDeputyRef.current = data;
+      tryShowPendingDeputy();
+    });
+  };
 
-    setTimeout(() => {
-      setResult(null);
-      setDeputy(null);
-      setShowAnimation(false);
-      loadNextDeputy(Date.now());
-    }, RESULT_DISPLAY_MS);
+  const handleAnimationEnd = () => {
+    setResult(null);
+    setDeputy(null);
+    setShowAnimation(false);
+    // Mark the moment the loader becomes visible and attempt to show
+    // the pending deputy (if the fetch already finished).
+    loadingStartRef.current = Date.now();
+    tryShowPendingDeputy();
   };
 
   const retry = () => {
     setFetchError(false);
-    loadNextDeputy();
+    loadingStartRef.current = Date.now();
+    fetchNextDeputy((data) => {
+      pendingDeputyRef.current = data;
+      tryShowPendingDeputy();
+    });
   };
 
-  return { deputy, lastDeputy, result, score, targetScore, showAnimation, fetchError, retry, vote };
+  return { deputy, lastDeputy, result, score, targetScore, showAnimation, fetchError, retry, vote, handleAnimationEnd };
 };
