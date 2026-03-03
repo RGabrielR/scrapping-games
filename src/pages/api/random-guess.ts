@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { chooseRandomApartment } from "@/infrastructure/db/rentRepository";
+import { scrapeValidApartment } from "@/infrastructure/scrapers/rentScraper";
 import type { ApartmentData } from "@/types";
 
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<ApartmentData | { error: string }>
 ) {
   try {
-    const apartment = await chooseRandomApartment();
+    const apartment = await scrapeValidApartment();
     res.status(200).json(apartment);
   } catch (error) {
     console.error("Error fetching random apartment:", error);

@@ -1,9 +1,3 @@
-import { GetServerSideProps } from "next";
+import RentPage from "@/features/rent-guess/ui/RentPage";
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return { redirect: { destination: "/como-voto", permanent: false } };
-};
-
-export default function CuantoEsta() {
-  return null;
-}
+export default RentPage;
