@@ -1,6 +1,10 @@
+import { execFile } from "child_process";
+import { promisify } from "util";
 import locations from "@/data/locations.json";
 import { usdToArs } from "../converters/currencyConverter";
 import type { ApartmentData } from "@/types";
+
+const execFileAsync = promisify(execFile);
 
 const MIN_IMAGES = 3;
 const MIN_METERS = 15;
@@ -9,6 +13,8 @@ const MAX_PAGE = 5;
 const FETCH_HEADERS = {
   "User-Agent":
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+  Accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
   "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
 };
 
@@ -39,14 +45,38 @@ interface ListingEntry {
   contentLocation?: { name?: string };
 }
 
+const buildUrl = (location: string, page: number): string => {
+  // ZonaProp 301-redirects the -pagina-1 variant to the base URL.
+  // Use the canonical base URL for page 1 to avoid that redirect.
+  const base = `https://www.zonaprop.com.ar/departamentos-alquiler-${location}-orden-publicado-descendente`;
+  return page === 1 ? `${base}.html` : `${base}-pagina-${page}.html`;
+};
+
+// Node.js native fetch is blocked by Cloudflare's JA3 TLS fingerprint detection.
+// Spawning curl uses a different TLS stack (Schannel on Windows, OpenSSL on Linux)
+// that passes Cloudflare's bot check.
+const fetchHtml = async (url: string): Promise<string> => {
+  const args = [
+    "-s", "-L", "--compressed", "--max-time", "30",
+    "-H", `User-Agent: ${FETCH_HEADERS["User-Agent"]}`,
+    "-H", `Accept: ${FETCH_HEADERS.Accept}`,
+    "-H", `Accept-Language: ${FETCH_HEADERS["Accept-Language"]}`,
+    "-H", "Cache-Control: max-age=0",
+    "-H", "Upgrade-Insecure-Requests: 1",
+    url,
+  ];
+  const { stdout } = await execFileAsync("curl", args, {
+    maxBuffer: 20 * 1024 * 1024,
+  });
+  return stdout;
+};
+
 const scrapeOnePage = async (): Promise<ApartmentData> => {
   const page = Math.floor(Math.random() * MAX_PAGE) + 1;
   const location = locations[Math.floor(Math.random() * locations.length)];
-  const url = `https://www.zonaprop.com.ar/departamentos-alquiler-${location}-orden-publicado-descendente-pagina-${page}.html`;
+  const url = buildUrl(location, page);
 
-  const response = await fetch(url, { headers: FETCH_HEADERS });
-  if (!response.ok) throw new Error(`ZonaProp responded ${response.status}`);
-  const html = await response.text();
+  const html = await fetchHtml(url);
 
   const schemas = parseSchemas(html);
 
