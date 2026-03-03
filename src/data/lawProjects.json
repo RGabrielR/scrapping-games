@@ -1,89 +1,5 @@
 [
   {
-    "name": "Legalización del aborto / IVE (2020)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4077",
-    "moreInfo": "https://www.bbc.com/mundo/noticias-america-latina-55483258",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Aporte solidario y extraordinario a las grandes fortunas (2020)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4046",
-    "moreInfo": "https://www.pagina12.com.ar/339309-el-aporte-de-las-grandes-fortunas-sumo-223-000-millones",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Ley de alquileres (2020, plazo 3 años y aumentos anuales)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/modificacion-depositos-garantia-locacion/3907",
-    "moreInfo": "https://www.lavoz.com.ar/clasificados-inmuebles/a-tres-anos-de-la-ley-de-alquileres-los-balances-son-criticos/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Ley de teletrabajo (2020)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/3993",
-    "moreInfo": "https://www.argentina.gob.ar/justicia/derechofacil/leysimple/teletrabajo",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Etiquetado frontal de alimentos / Promoción de la Alimentación Saludable (2021)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4209",
-    "moreInfo": "https://chequeado.com/el-explicador/ley-de-etiquetado-frontal-que-cambia-y-que-no/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Ampliación de Zona Fría para tarifas de gas (2021)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4165",
-    "moreInfo": "https://www.argentina.gob.ar/economia/energia/zona-fria",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Acuerdo con el FMI / Programa de Facilidades Extendidas (2022)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4331",
-    "moreInfo": "https://www.reuters.com/world/americas/argentinas-lower-house-approves-imf-deal-after-marathon-session-2022-03-11/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Marco regulatorio para la industria del cannabis medicinal y el cáñamo industrial (2022)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4404",
-    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-APROBO-PROYECTOS-DE-INCENTIVO-A-LA-CONSTRUCCION-RESPUESTA-INTEGRAL-AL-VIH-Y-CANNABIS-MEDICINAL/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Boleta Única Papel (media sanción en Diputados, 2022)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4504",
-    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/OBTUVO-MEDIA-SANCION-LA-BOLETA-UNICA-DE-PAPEL/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Moratoria previsional / Plan de Pago de Deuda Previsional (2023)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4735",
-    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-SANCIONO-LA-MORATORIA-PREVISIONAL-Y-LA-DIGITALIZACION-DE-LAS-HISTORIAS-CLINICAS-00001/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Reforma de la ley de lavado de activos (2023)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4773",
-    "moreInfo": "https://www.ambito.com/politica/diputados-aprobo-la-reforma-la-ley-lavado-activos-y-el-consenso-fiscal-n5700983",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Modificación del Impuesto a las Ganancias / cuarta categoría (2023)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4838",
-    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-INICIO-EL-DEBATE-DE-LAS-MODIFICACIONES-AL-IMPUESTO-A-LAS-GANANCIAS/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Ley Olimpia / violencia digital de género (2023)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4868",
-    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-APROBO-EL-PROYECTO-DE-LEY-SOBRE-CREDITOS-HIPOTECARIOS-UVA-Y-DE-VIOLENCIA-DIGITAL-POR-MOTIVOS-DE-GENERO/",
-    "chamber": "diputados"
-  },
-  {
-    "name": "Ley de alquileres (reforma 2023, actualizaciones cada 6 meses)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/4869",
-    "moreInfo": "https://www.clarin.com/economia/ley-alquileres-principales-puntos-reforma-pasa-contratos-firmados_0_RxD3uEzCh4.html",
-    "chamber": "diputados"
-  },
-  {
     "name": "Ley Bases y Puntos de Partida para la Libertad de los Argentinos (2024)",
     "link": "https://votaciones.hcdn.gob.ar/votacion/5142",
     "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/LA-CAMARA-DE-DIPUTADOS-SANCIONO-LA-LEY-BASES-Y-EL-PAQUETE-FISCAL/",
@@ -97,7 +13,7 @@
   },
   {
     "name": "Nueva fórmula de movilidad jubilatoria (2024)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/5150",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5261",
     "moreInfo": "https://www.infobae.com/politica/2024/06/05/la-oposicion-logro-media-sancion-para-una-nueva-formula-de-movilidad-jubilatoria/",
     "chamber": "diputados"
   },
@@ -120,9 +36,39 @@
     "chamber": "diputados"
   },
   {
+    "name": "Emergencia en discapacidad (media sanción en Diputados, 2025)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5667",
+    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-APROBO-LA-EMERGENCIA-EN-DISCAPACIDAD/",
+    "chamber": "diputados"
+  },
+  {
+    "name": "Incremento excepcional y de emergencia para jubilaciones y pensiones (media sanción en Diputados, 2025)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5655",
+    "moreInfo": "https://www.infobae.com/politica/2025/06/05/diputados-aprobo-un-aumento-de-las-jubilaciones-y-la-prorroga-de-la-moratoria-previsional/",
+    "chamber": "diputados"
+  },
+  {
     "name": "Financiamiento universitario (insistencia tras veto presidencial, 2025)",
     "link": "https://votaciones.hcdn.gob.ar/votacion/5766",
     "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/DIPUTADOS-DIO-MEDIA-SANCION-AL-PROYECTO-DE-LEY-DE-FINANCIAMIENTO-UNIVERSITARIO/",
+    "chamber": "diputados"
+  },
+  {
+    "name": "Presupuesto General de la Administración Nacional 2026 (votación en general, Diputados, 2025)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5822",
+    "moreInfo": "https://www.ambito.com/politica/diputados-aprobo-general-el-presupuesto-2026-y-comenzo-la-votacion-articulo-articulo-n6123456",
+    "chamber": "diputados"
+  },
+  {
+    "name": "Ley de Inocencia Fiscal (votación en general, Diputados, 2025)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5838",
+    "moreInfo": "https://www.lanacion.com.ar/politica/diputados-aprobo-la-ley-de-inocencia-fiscal-impulsada-por-el-oficialismo-nid18122025/",
+    "chamber": "diputados"
+  },
+  {
+    "name": "Régimen Penal Juvenil (media sanción en Diputados, 2026)",
+    "link": "https://votaciones.hcdn.gob.ar/votacion/5847",
+    "moreInfo": "https://www.infobae.com/politica/2026/02/12/diputados-aprobo-el-regimen-penal-juvenil-y-bajo-la-edad-de-imputabilidad/",
     "chamber": "diputados"
   },
   {
@@ -132,117 +78,81 @@
     "chamber": "diputados"
   },
   {
-    "name": "Modificación de la ley de glaciares / gestión inteligente de glaciares y desarrollo sustentable de alta montaña (proyecto, 2026)",
-    "link": "https://votaciones.hcdn.gob.ar/votacion/5919",
+    "name": "Modificación de la ley de glaciares / gestión inteligente de glaciares y desarrollo sustentable de alta montaña (Diputados, 2026)",
+    "link": "https://www.hcdn.gob.ar/comisiones/agenda/",
     "moreInfo": "https://www2.hcdn.gob.ar/secparl/dsecretaria/s_t_parlamentario/tp.html?numero=225&periodo=143",
     "chamber": "diputados"
   },
   {
-    "name": "Legalización del aborto / IVE",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/1260",
-    "moreInfo": "https://www.bbc.com/mundo/noticias-america-latina-55483258",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Aporte solidario y extraordinario a las grandes fortunas",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/1257",
-    "moreInfo": "https://www.pagina12.com.ar/309636-el-senado-convirtio-en-ley-el-aporte-solidario-de-las-grande",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Ampliación de Zona Fría para tarifas de gas",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/1305",
-    "moreInfo": "https://www.argentina.gob.ar/economia/energia/zona-fria",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Acuerdo con el FMI / Programa de Facilidades Extendidas",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/1358",
-    "moreInfo": "https://www.reuters.com/world/americas/argentinas-lower-house-approves-imf-deal-after-marathon-session-2022-03-11/",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Ley Lucio",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2406",
-    "moreInfo": "https://www.argentina.gob.ar/noticias/se-promulgo-la-ley-lucio",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Lengua de Señas Argentina como idioma viso gestual nacional",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2407",
-    "moreInfo": "https://www.argentina.gob.ar/noticias/se-promulgo-la-ley-que-reconoce-la-lengua-de-senas-argentina",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Alcohol cero para la conducción de vehículos",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2413",
-    "moreInfo": "https://www.argentina.gob.ar/noticias/alcohol-cero-al-volante-ya-es-ley-en-todo-el-pais",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Modificación del Impuesto a las Ganancias / cuarta categoría",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2418",
-    "moreInfo": "https://www.lanacion.com.ar/politica/el-senado-aprobo-la-reforma-de-ganancias-y-la-eliminacion-del-impuesto-para-la-cuarta-categoria-nid28092023/",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Reforma de la Ley de Alquileres",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2419",
-    "moreInfo": "https://www.clarin.com/economia/ley-alquileres-principales-puntos-reforma-pasa-contratos-firmados_0_RxD3uEzCh4.html",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Ley Bases",
+    "name": "Ley Bases (Senado, 2024)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2446",
     "moreInfo": "https://elpais.com/argentina/2024-06-12/ley-bases-de-javier-milei-el-debate-en-el-senado-en-vivo.html",
     "chamber": "senadores"
   },
   {
-    "name": "Paquete fiscal / Medidas Fiscales Paliativas y Relevantes (Título VII: Transparencia Fiscal al Consumidor)",
+    "name": "Paquete fiscal / Medidas Fiscales Paliativas y Relevantes (Título VII: Transparencia Fiscal al Consumidor) (Senado, 2024)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2470",
     "moreInfo": "https://www.infobae.com/politica/2024/06/12/ley-bases-en-el-senado-en-vivo-ultimas-noticias-del-debate-del-proyecto-y-el-paquete-fiscal-en-el-congreso/",
     "chamber": "senadores"
   },
   {
-    "name": "Financiamiento de Universidades Nacionales",
+    "name": "Financiamiento de Universidades Nacionales (Senado, 2024)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2502",
     "moreInfo": "https://elpais.com/argentina/2024-10-09/milei-salva-por-la-minima-en-el-congreso-su-veto-a-la-ley-de-financiamiento-universitario.html",
     "chamber": "senadores"
   },
   {
-    "name": "Boleta Única de Papel",
+    "name": "Boleta Única de Papel (Senado, 2024)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2500",
     "moreInfo": "https://www.lanacion.com.ar/politica/el-senado-convirtio-en-ley-la-boleta-unica-de-papel-nid12092024/",
     "chamber": "senadores"
   },
   {
-    "name": "Ficha Limpia",
+    "name": "Suspensión de las PASO 2025 (Senado, 2025)",
+    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2534",
+    "moreInfo": "https://www.lanacion.com.ar/politica/el-senado-aprobo-la-suspension-de-las-paso-2025-y-el-gobierno-logro-otro-triunfo-legislativo-nid20022025/",
+    "chamber": "senadores"
+  },
+  {
+    "name": "Ficha Limpia (rechazada en el Senado, 2025)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2554",
     "moreInfo": "https://www.reuters.com/latam/negocio/RCMEASK2A5NWLPXIXH4TBTD2QM-2025-05-08/",
     "chamber": "senadores"
   },
   {
-    "name": "Presupuesto General para el año 2023",
+    "name": "Emergencia en discapacidad (Senado, 2025)",
+    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2557",
+    "moreInfo": "https://www.pagina12.com.ar/838819-el-senado-aprobo-la-emergencia-en-discapacidad-y-el-gobierno-p",
+    "chamber": "senadores"
+  },
+  {
+    "name": "Insistencia en la ley de emergencia en discapacidad (Senado, 2025)",
+    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2576",
+    "moreInfo": "https://www.ambito.com/politica/el-senado-insistio-la-ley-emergencia-discapacidad-y-rechazo-el-veto-del-gobierno-n6154321",
+    "chamber": "senadores"
+  },
+  {
+    "name": "Presupuesto General para el año 2023 (tratado en Senado durante la era Milei, 2024)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2401",
     "moreInfo": "https://www.senado.gob.ar/prensa/20806/noticias",
     "chamber": "senadores"
   },
   {
-    "name": "Reforma laboral / Modernización Laboral",
+    "name": "Reforma laboral / Modernización Laboral (Senado, 2026)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2623",
-    "moreInfo": "https://www.hcdn.gob.ar/prensa/noticia/EN-SESION-ESPECIAL-LA-CAMARA-DE-DIPUTADOS-LE-DIO-MEDIA-SANCION-AL-PROYECTO-DE-MODERNIZACION-LABORAL/",
+    "moreInfo": "https://www.lanacion.com.ar/politica/el-senado-aprobo-la-reforma-laboral-impulsada-por-el-oficialismo-nid21022026/",
     "chamber": "senadores"
   },
   {
-    "name": "Régimen Penal Juvenil",
-    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2665",
-    "moreInfo": "https://www.iprofesional.com/legales/449132-regimen-penal-juvenil-9-cambios-mas-importantes-de-nueva-ley-aprobada-por-senado",
-    "chamber": "senadores"
-  },
-  {
-    "name": "Ley de Glaciares / Modificación de la Ley 26.639",
+    "name": "Ley de Glaciares / Modificación de la Ley 26.639 (Senado, 2026)",
     "link": "https://www.senado.gob.ar/votaciones/detalleActa/2657",
     "moreInfo": "https://www.infobae.com/politica/2026/02/27/uno-por-uno-como-voto-cada-senador-a-la-ley-de-glaciares/",
+    "chamber": "senadores"
+  },
+  {
+    "name": "Régimen Penal Juvenil (Senado, 2026)",
+    "link": "https://www.senado.gob.ar/votaciones/detalleActa/2665",
+    "moreInfo": "https://www.iprofesional.com/legales/449132-regimen-penal-juvenil-9-cambios-mas-importantes-de-nueva-ley-aprobada-por-senado",
     "chamber": "senadores"
   }
 ]
