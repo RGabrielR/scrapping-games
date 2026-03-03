@@ -8,9 +8,9 @@ const ImageDescription = ({ data }: ImageDescriptionProps) => {
       {data.map((item, index) => (
         <p
           key={`${item}-${index}`}
-          className="w-full max-w-[13rem] rounded-lg border-3 border-blue-900 bg-blue-500 px-3 py-2 text-center text-sm font-semibold text-white shadow-md shadow-blue-200 sm:text-base"
+          className="w-full max-w-[13rem] rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-center text-sm font-semibold text-slate-700 shadow-sm sm:text-[0.92rem]"
         >
-          - {item}
+          {item}
         </p>
       ))}
     </div>
