@@ -3,6 +3,15 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        buffer: require.resolve("buffer/"),
+      };
+    }
+    return config;
+  },
   images: {
     domains: [
       "votaciones.hcdn.gob.ar",
@@ -15,6 +24,7 @@ const nextConfig = {
       "img.freepik.com",
       "pixabay.com",
       "upload.wikimedia.org",
+      "imgar.zonapropcdn.com",
     ],
   },
 };
