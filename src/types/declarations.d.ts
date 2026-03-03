@@ -4,11 +4,3 @@ declare module "*.svg" {
   export default content;
 }
 
-declare module "@sparticuz/chromium" {
-  const chromium: {
-    args: string[];
-    executablePath: string | Promise<string>;
-    headless: boolean;
-  };
-  export = chromium;
-}
