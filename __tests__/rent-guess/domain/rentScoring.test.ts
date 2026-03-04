@@ -1,4 +1,4 @@
-import { evaluateGuess } from "@/features/rent-guess/domain/rentScoring";
+import { evaluateGuess, shouldCountStrike } from "@/features/rent-guess/domain/rentScoring";
 import { RentResult } from "@/features/rent-guess/domain/RentResult";
 
 const REAL_PRICE = "ARS 1.000.000";
@@ -73,5 +73,23 @@ describe("evaluateGuess", () => {
     expect(evaluateGuess(1000000, "$ 1.000.000").result).toBe(
       RentResult.EXCELLENT
     );
+  });
+});
+
+describe("shouldCountStrike", () => {
+  it("returns false when percentDiff is exactly 30", () => {
+    expect(shouldCountStrike(30)).toBe(false);
+  });
+
+  it("returns true when percentDiff is 30.01", () => {
+    expect(shouldCountStrike(30.01)).toBe(true);
+  });
+
+  it("returns false when percentDiff is 0", () => {
+    expect(shouldCountStrike(0)).toBe(false);
+  });
+
+  it("returns true when percentDiff is 100", () => {
+    expect(shouldCountStrike(100)).toBe(true);
   });
 });

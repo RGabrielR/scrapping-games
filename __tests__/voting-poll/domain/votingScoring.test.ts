@@ -23,25 +23,25 @@ describe("evaluateVote", () => {
     });
   });
 
-  it("returns correct=false and delta=-20 when vote doesn't match", () => {
+  it("returns correct=false and delta=0 when vote doesn't match", () => {
     expect(evaluateVote(["AFIRMATIVO"], "NEGATIVO")).toEqual({
       correct: false,
-      delta: -20,
+      delta: 0,
     });
     expect(evaluateVote(["NEGATIVO"], "AFIRMATIVO")).toEqual({
       correct: false,
-      delta: -20,
+      delta: 0,
     });
     expect(evaluateVote(["AFIRMATIVO"], "AUSENTE")).toEqual({
       correct: false,
-      delta: -20,
+      delta: 0,
     });
   });
 
   it("does not match AUSENTE/ABSTENCION group against AFIRMATIVO", () => {
     expect(evaluateVote(["AUSENTE", "ABSTENCION"], "AFIRMATIVO")).toEqual({
       correct: false,
-      delta: -20,
+      delta: 0,
     });
   });
 });
