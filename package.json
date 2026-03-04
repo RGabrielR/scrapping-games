@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.2",
+    "@libsql/client": "^0.17.0",
     "@next/font": "13.4.8",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide": "^4.1.4",
