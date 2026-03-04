@@ -68,6 +68,8 @@ const parseArsPrice = (priceString: string): number =>
     priceString.replace("ARS ", "").replace("$ ", "").replaceAll(".", "")
   );
 
+export const shouldCountStrike = (percentDiff: number): boolean => percentDiff > 30;
+
 export const evaluateGuess = (
   guessedPrice: number,
   realPriceARS: string

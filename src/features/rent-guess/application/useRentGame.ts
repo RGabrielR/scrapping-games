@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { evaluateGuess } from "../domain/rentScoring";
+import { evaluateGuess, shouldCountStrike } from "../domain/rentScoring";
 import { parseFormattedNumber } from "@/shared/lib/numberFormat";
 import type { ApartmentData, ApartmentWithResult } from "@/types";
 
 const SCORE_TICK_MS = 10;
 const MODAL_DELAY_MS = 2000;
 const NEXT_ROUND_DELAY_MS = 2100;
+const MAX_STRIKES = 3;
 
 const fetchApartment = (): Promise<ApartmentData> =>
   fetch("/api/random-guess").then((r) => r.json());
@@ -22,6 +23,8 @@ export const useRentGame = () => {
   const [showHint, setShowHint] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [guess, setGuess] = useState("");
+  const [strikes, setStrikes] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     Promise.all([fetchApartment(), fetchApartment()]).then(([present, next]) => {
@@ -50,16 +53,34 @@ export const useRentGame = () => {
   }, [score, targetScore]);
 
   const submitGuess = () => {
-    if (!guess || !presentApartment) return;
+    if (!guess || !presentApartment || gameOver) return;
 
     const guessedPrice = parseFormattedNumber(guess);
     const { result: newResult, delta, percentDiff, title, feedbackMessage } =
       evaluateGuess(guessedPrice, presentApartment.prizeInARS ?? "");
 
+    const isStrike = shouldCountStrike(percentDiff);
+
     setResult(newResult);
-    setTargetScore(score + delta);
     setLastApartment({ ...presentApartment, percentDiff, guess, title, feedbackMessage });
     setShowAnimation(true);
+
+    if (isStrike) {
+      const newStrikes = strikes + 1;
+      setStrikes(newStrikes);
+      if (newStrikes >= MAX_STRIKES) {
+        setGameOver(true);
+        setTimeout(() => {
+          setShowResult(true);
+          setShowAnimation(false);
+          setGuess("");
+        }, MODAL_DELAY_MS);
+        return;
+      }
+      // Strike but not game over — no score change
+    } else {
+      setTargetScore(score + delta);
+    }
 
     setTimeout(() => {
       setShowResult(true);
@@ -72,6 +93,25 @@ export const useRentGame = () => {
       setNextApartment(null);
       fetchApartment().then(setNextApartment);
     }, NEXT_ROUND_DELAY_MS);
+  };
+
+  const resetGame = () => {
+    setScore(0);
+    setTargetScore(null);
+    setStrikes(0);
+    setGameOver(false);
+    setResult(null);
+    setShowAnimation(false);
+    setShowResult(false);
+    setShowHint(false);
+    setGuess("");
+    setLastApartment(null);
+    setPresentApartment(null);
+    setNextApartment(null);
+    Promise.all([fetchApartment(), fetchApartment()]).then(([present, next]) => {
+      setPresentApartment(present);
+      setNextApartment(next);
+    });
   };
 
   return {
@@ -88,5 +128,8 @@ export const useRentGame = () => {
     guess,
     setGuess,
     submitGuess,
+    strikes,
+    gameOver,
+    resetGame,
   };
 };
