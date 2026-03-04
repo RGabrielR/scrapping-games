@@ -1,7 +1,7 @@
 import type { VoteEvaluation } from "@/types";
 
 const CORRECT_SCORE_DELTA = 100;
-const INCORRECT_SCORE_DELTA = -20;
+const INCORRECT_SCORE_DELTA = 0;
 
 export const evaluateVote = (
   selectedOptions: string[],

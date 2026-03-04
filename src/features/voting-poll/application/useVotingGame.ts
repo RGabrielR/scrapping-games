@@ -6,6 +6,7 @@ import type { Deputy } from "@/types";
 const SCORE_TICK_MS = 10;
 const MIN_LOADING_DISPLAY_MS = 2000;
 const FETCH_TIMEOUT_MS = 12000;
+const MAX_STRIKES = 3;
 
 const isValidDeputyPayload = (value: unknown): value is Deputy => {
   if (!value || typeof value !== "object") return false;
@@ -33,6 +34,8 @@ export const useVotingGame = () => {
   const [targetScore, setTargetScore] = useState<number | null>(null);
   const [showAnimation, setShowAnimation] = useState(false);
   const [fetchError, setFetchError] = useState(false);
+  const [strikes, setStrikes] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
   // pendingDeputyRef: holds the fetched deputy while waiting for the loader to appear.
   // loadingStartRef: timestamp of when the loader became visible (set in handleAnimationEnd / retry).
@@ -120,10 +123,21 @@ export const useVotingGame = () => {
   }, [score, targetScore]);
 
   const vote = (selectedOptions: string[]) => {
-    if (!deputy) return;
+    if (!deputy || gameOver) return;
     setLastDeputy(deputy);
     const { correct, delta } = evaluateVote(selectedOptions, deputy.vote);
     setResult(correct ? "CORRECT" : "INCORRECT");
+
+    if (!correct) {
+      const newStrikes = strikes + 1;
+      setStrikes(newStrikes);
+      if (newStrikes >= MAX_STRIKES) {
+        setGameOver(true);
+        setShowAnimation(true);
+        return;
+      }
+    }
+
     setTargetScore(score + delta);
     setShowAnimation(true);
     // Fetch runs in parallel with the animation so the data is ready
@@ -135,6 +149,7 @@ export const useVotingGame = () => {
   };
 
   const handleAnimationEnd = () => {
+    if (gameOver) return;
     setResult(null);
     setDeputy(null);
     setShowAnimation(false);
@@ -153,5 +168,22 @@ export const useVotingGame = () => {
     });
   };
 
-  return { deputy, lastDeputy, result, score, targetScore, showAnimation, fetchError, retry, vote, handleAnimationEnd };
+  const resetGame = () => {
+    setScore(0);
+    setTargetScore(null);
+    setStrikes(0);
+    setGameOver(false);
+    setResult(null);
+    setShowAnimation(false);
+    setDeputy(null);
+    setLastDeputy(null);
+    pendingDeputyRef.current = null;
+    loadingStartRef.current = null;
+    fetchNextDeputy((data) => {
+      setDeputy(data);
+      setFetchError(false);
+    });
+  };
+
+  return { deputy, lastDeputy, result, score, targetScore, showAnimation, fetchError, strikes, gameOver, retry, vote, handleAnimationEnd, resetGame };
 };

@@ -4,6 +4,9 @@ import BlurImage from "@/shared/ui/BlurImage";
 import CongressLoader from "@/shared/ui/CongressLoader";
 import ScoreAnimation from "@/shared/ui/ScoreAnimation";
 import ImageDescription from "@/shared/ui/ImageDescription";
+import StrikesHUD from "@/shared/ui/StrikesHUD";
+import GameOverModal from "@/shared/ui/GameOverModal";
+import NavBurguer from "@/components/NavBurguer/NavBurguer";
 import { scoreColor } from "@/shared/domain/scoreDisplay";
 import { useVotingGame } from "../application/useVotingGame";
 import VoteOptions from "./VoteOptions";
@@ -19,9 +22,12 @@ const VotingPage = () => {
     targetScore,
     showAnimation,
     fetchError,
+    strikes,
+    gameOver,
     retry,
     vote,
     handleAnimationEnd,
+    resetGame,
   } = useVotingGame();
 
   return (
@@ -44,18 +50,22 @@ const VotingPage = () => {
         <span className="floating-question fq8">?</span>
       </div>
 
-      {score !== 0 && (
-        <div className="absolute left-4 top-4 z-50">
+      <NavBurguer />
+
+      {/* Score pill + strikes */}
+      <div className="absolute left-4 top-4 z-50 flex items-center gap-2">
+        {score !== 0 && (
           <p
             style={{ color: scoreColor({ score, targetScore }) }}
             className="rounded-full border border-slate-200 bg-white/95 px-5 py-2 text-sm font-extrabold tracking-wide shadow-md backdrop-blur"
           >
             Puntaje: <span className="text-slate-900">{score}</span>
           </p>
-        </div>
-      )}
+        )}
+        {strikes > 0 && <StrikesHUD strikes={strikes} />}
+      </div>
 
-{showAnimation && (
+      {showAnimation && (
         <ScoreAnimation result={result} onAnimationEnd={handleAnimationEnd} />
       )}
 
@@ -193,6 +203,14 @@ const VotingPage = () => {
           )}
         </div>
       )}
+
+      <GameOverModal
+        show={gameOver}
+        game="como-voto"
+        score={score}
+        strikes={strikes}
+        onRetry={resetGame}
+      />
     </div>
   );
 };
