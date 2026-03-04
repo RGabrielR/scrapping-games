@@ -16,6 +16,11 @@ export interface ApartmentData {
   description: string;
   prizeInARS?: string;
   prizeInUSD?: string;
+  city?: string;
+  rooms?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  expenses?: string;
 }
 
 export interface ApartmentWithResult extends ApartmentData {
@@ -36,4 +41,19 @@ export interface RentEvaluation {
   percentDiff: number;
   title: string;
   feedbackMessage: string;
+}
+
+export interface LeaderboardEntry {
+  id: string;
+  game: string;
+  name: string;
+  score: number;
+  strikes: number | null;
+  createdAt: string;
+}
+
+export interface SaveScoreResult {
+  saved: boolean;
+  qualified: boolean;
+  rank?: number;
 }
