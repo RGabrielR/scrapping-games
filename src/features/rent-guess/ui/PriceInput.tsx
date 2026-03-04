@@ -5,57 +5,66 @@ interface PriceInputProps {
   onChange: (v: string) => void;
   onSubmit: () => void;
   onHint: () => void;
+  hintDisabled?: boolean;
 }
 
-const PriceInput = ({ value, onChange, onSubmit, onHint }: PriceInputProps) => {
+const PriceInput = ({ value, onChange, onSubmit, onHint, hintDisabled = false }: PriceInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     onChange(formatThousands(e.target.value));
 
   return (
-    <div className="flex flex-row justify-center items-center md:mt-0">
-      <div
-        className="w-[15%] sm:w-[8%] bg-green-500 mr-2 md:mr-6 cursor-pointer hover:bg-green-600 rounded-md"
-        onClick={onHint}
+    <div className="flex flex-row items-center gap-2">
+      <button
+        onClick={hintDisabled ? undefined : onHint}
+        disabled={hintDisabled}
+        className={`flex flex-shrink-0 flex-col items-center gap-0.5 rounded-xl border px-3 py-2 shadow-sm transition ${
+          hintDisabled
+            ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-300"
+            : "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 active:scale-95"
+        }`}
+        title={hintDisabled ? "Sin pista disponible" : "Ver pista"}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
-          className="p-2 md:p-4 h-12 md:h-20"
-          style={{ fill: "white", width: "100%" }}
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="h-5 w-5"
         >
-          <path d="M385.1 419.1C349.7 447.2 304.8 464 256 464s-93.7-16.8-129.1-44.9l80.4-80.4c14.3 8.4 31 13.3 48.8 13.3s34.5-4.8 48.8-13.3l80.4 80.4zm68.1 .2C489.9 374.9 512 318.1 512 256s-22.1-118.9-58.8-163.3L465 81c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0L419.3 58.8C374.9 22.1 318.1 0 256 0S137.1 22.1 92.7 58.8L81 47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9L58.8 92.7C22.1 137.1 0 193.9 0 256s22.1 118.9 58.8 163.3L47 431c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l11.8-11.8C137.1 489.9 193.9 512 256 512s118.9-22.1 163.3-58.8L431 465c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-11.8-11.8zm-34.1-34.1l-80.4-80.4c8.4-14.3 13.3-31 13.3-48.8s-4.8-34.5-13.3-48.8l80.4-80.4C447.2 162.3 464 207.2 464 256s-16.8 93.7-44.9 129.1zM385.1 92.9l-80.4 80.4c-14.3-8.4-31-13.3-48.8-13.3s-34.5 4.8-48.8 13.3L126.9 92.9C162.3 64.8 207.2 48 256 48s93.7 16.8 129.1 44.9zM173.3 304.8L92.9 385.1C64.8 349.7 48 304.8 48 256s16.8-93.7 44.9-129.1l80.4 80.4c-8.4 14.3-13.3 31-13.3 48.8s4.8 34.5 13.3 48.8zM208 256a48 48 0 1 1 96 0 48 48 0 1 1 -96 0z" />
+          <path d="M12 2a7 7 0 00-5.468 11.37A5.006 5.006 0 006 17v1a2 2 0 002 2h.126A2 2 0 0010 21h4a2 2 0 001.874-1H16a2 2 0 002-2v-1a5.006 5.006 0 00-.532-3.63A7 7 0 0012 2zm0 2a5 5 0 013.473 8.632A3 3 0 0014 15h-4a3 3 0 00-1.473-2.368A5 5 0 0112 4zm-2 13h4v1h-4v-1z" />
         </svg>
-      </div>
+        <span className="text-[0.65rem] font-bold uppercase tracking-wide">Pista</span>
+      </button>
 
-      <div className="relative w-[70%]">
+      <div className="relative flex-1">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 z-10">
+          <span className="text-gray-500 text-xl md:text-2xl">$</span>
+        </div>
         <input
           type="text"
-          className="md:py-6 px-4 text-gray-500 pl-12 pr-16 block w-full border-2 border-gray-200 shadow-sm rounded-md text-lg md:text-3xl focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-white dark:border-gray-700 dark:text-gray-400"
-          placeholder="0.00"
+          className="w-full rounded-xl border-2 border-gray-200 bg-white py-3 pl-10 pr-20 text-lg shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 md:py-4 md:text-2xl"
+          placeholder="0"
           autoComplete="off"
           onChange={handleChange}
           value={value}
           style={{ WebkitAppearance: "none", MozAppearance: "textfield" } as React.CSSProperties}
         />
-        <div className="absolute inset-y-0 left-0 top-[-0.1rem] flex items-center rounded-sm pointer-events-none z-20 pl-4">
-          <span className="text-gray-500 text-xl md:text-3xl">$</span>
+        <div className="pointer-events-none absolute inset-y-0 right-14 flex items-center z-10">
+          <span className="text-gray-400 text-sm font-semibold">ARS</span>
         </div>
-        <div className="absolute inset-y-0 right-0 flex items-center rounded-sm pointer-events-none z-20 pr-20">
-          <span className="text-gray-500 text-xl md:text-3xl">ARS</span>
-        </div>
-        <div
+        <button
           onClick={onSubmit}
-          className="absolute inset-y-0 right-0 flex rounded-sm items-center z-20 cursor-pointer bg-slate-950 hover:bg-black pl-6 pr-6"
+          className="absolute inset-y-0 right-0 flex items-center justify-center rounded-r-xl bg-slate-900 px-4 text-white transition hover:bg-slate-700 active:bg-black"
+          title="Confirmar"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="1em"
             viewBox="0 0 320 512"
-            style={{ fill: "white" }}
+            className="h-4 w-4"
+            fill="currentColor"
           >
             <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z" />
           </svg>
-        </div>
+        </button>
       </div>
     </div>
   );

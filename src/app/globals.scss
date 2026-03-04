@@ -343,11 +343,8 @@ input[type="number"] {
   .enter-right-to-left {
     animation: slide-left-small 2s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
   }
-  .splide {
-    max-height: 25rem;
-  }
   .splide__arrow {
-    margin-top: 1rem;
+    margin-top: 0;
   }
 }
 
@@ -531,13 +528,9 @@ input[type="number"] {
 }
 .splide {
   padding-top: 0;
-  height: 50%;
-}
-.splide__list {
-  transform: translateX(25%);
 }
 .splide__pagination {
-  top: 180%;
+  bottom: 0.4rem;
 }
 .splide__arrow svg {
   fill: rgba(1, 65, 255, 0.4);
@@ -547,6 +540,29 @@ input[type="number"] {
 }
 .splide__arrow svg:hover {
   fill: rgba(1, 65, 255, 0.8);
+}
+
+// Building complex loader (rent-guess)
+.building-loader-svg {
+  width: 220px;
+  height: 160px;
+  color: #334155;
+  animation: congress-float 2.7s ease-in-out infinite;
+  filter: drop-shadow(0 8px 16px rgba(51, 65, 85, 0.2));
+}
+
+// Rent carousel: fills the flexible space its wrapper gives it
+.rent-carousel,
+.rent-carousel .splide,
+.rent-carousel .splide__track,
+.rent-carousel .splide__list,
+.rent-carousel .splide__slide {
+  height: 100%;
+}
+.rent-carousel .splide__slide img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 // Rental loading
