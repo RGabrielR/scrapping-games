@@ -2,6 +2,17 @@ import locations from "@/data/locations.json";
 import { usdToArs } from "../converters/currencyConverter";
 import type { ApartmentData } from "@/types";
 
+/** Decode numeric HTML entities (&#xNN; and &#NNN;) and common named ones. */
+const decodeHtmlEntities = (str: string): string =>
+  str
+    .replace(/&#x([0-9a-fA-F]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(parseInt(d, 10)))
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/g, " ");
+
 const MIN_IMAGES = 3;
 const MIN_METERS = 15;
 const MAX_PAGE = 5;
@@ -23,7 +34,12 @@ const buildUrl = (location: string, page: number): string => {
 
 interface ParsedListing {
   location: string;
+  city?: string;
   meters: number;
+  rooms?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  expenses?: string;
   price: string;
   isUSD: boolean;
   description: string;
@@ -45,13 +61,37 @@ const parseListings = (html: string): ParsedListing[] => {
     );
 
     // --- Location ---
-    // "Departamento en Alquiler en NEIGHBORHOOD, BARRIO"
+    // "Departamento en Alquiler en NEIGHBORHOOD, BARRIO/CITY"
     const locationMatch = block.match(
-      /card__title--primary[^>]*>\s*(?:Departamento [^<]*en\s+)?([^<,]+?)(?:,\s*[^<]+)?\s*<\/p>/
+      /card__title--primary[^>]*>\s*(?:Departamento [^<]*en\s+)?([^<,]+?)(?:,\s*([^<]+?))?\s*<\/p>/
     );
     const location = locationMatch
-      ? locationMatch[1].trim().replace(/Departamento.*?en\s+/i, "").trim()
+      ? decodeHtmlEntities(locationMatch[1].trim().replace(/Departamento.*?en\s+/i, "").trim())
       : "";
+    const cityRaw = locationMatch?.[2]?.trim() ?? "";
+    // Only keep city when it adds information (different from the sub-neighbourhood)
+    const city = cityRaw && cityRaw.toLowerCase() !== location.toLowerCase()
+      ? decodeHtmlEntities(cityRaw)
+      : undefined;
+
+    // --- Features (rooms, bedrooms, bathrooms, m²) ---
+    const featuresBlock = block.match(/card__main-features[^>]*>([\s\S]*?)<\/ul>/)?.[1] ?? "";
+    const featuresText = featuresBlock.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+    const roomsMatch = featuresText.match(/(\d+)\s*amb/i);
+    const rooms = roomsMatch
+      ? decodeHtmlEntities(`${roomsMatch[1]} amb.`)
+      : undefined;
+
+    const bedroomsMatch = featuresText.match(/(\d+)\s*dorm/i);
+    const bedrooms = bedroomsMatch
+      ? decodeHtmlEntities(`${bedroomsMatch[1]} dorm.`)
+      : undefined;
+
+    const bathroomsMatch = featuresText.match(/(\d+)\s*ba[nñ]/i);
+    const bathrooms = bathroomsMatch
+      ? decodeHtmlEntities(`${bathroomsMatch[1]} baño${bathroomsMatch[1] !== "1" ? "s" : ""}`)
+      : undefined;
 
     // --- Meters ---
     const metersMatch = block.match(/(\d+)\s*m(?:&#xB2;|²)\s*cubie/i) ??
@@ -61,8 +101,13 @@ const parseListings = (html: string): ParsedListing[] => {
 
     // --- Price ---
     const priceBlock = block.match(/card__price[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? "";
-    const rawPrice = priceBlock
-      .replace(/<[^>]+>/g, " ")
+    const priceText = priceBlock.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+    // Extract expenses before stripping the &plus; part
+    const expensesMatch = priceText.replace(/&plus;/g, "+").match(/\+[^$]*\$?\s*([\d.,]+)/);
+    const expenses = expensesMatch ? `$ ${expensesMatch[1]}` : undefined;
+
+    const rawPrice = priceText
       .replace(/&plus;[\s\S]*/g, "")  // strip "+ expenses" part
       .replace(/\s+/g, " ")
       .trim();
@@ -74,7 +119,10 @@ const parseListings = (html: string): ParsedListing[] => {
     // --- Description ---
     const descMatch = block.match(/card__info[^>]*>\s*([\s\S]*?)\s*<\/p>/);
     const description = descMatch
-      ? descMatch[1].replace(/<[^>]+>/g, "").trim()
+      ? decodeHtmlEntities(descMatch[1].replace(/<[^>]+>/g, ""))
+          .replace(/\r\n/g, "\n")       // normalise line endings
+          .replace(/\n{3,}/g, "\n\n")   // collapse excess blank lines
+          .trim()
       : "";
 
     // --- Images (replace _u_small with _u_large for better quality) ---
@@ -87,7 +135,7 @@ const parseListings = (html: string): ParsedListing[] => {
     const images = [...new Set(rawImages)];
     if (images.length < MIN_IMAGES) continue;
 
-    results.push({ location, meters, price: rawPrice, isUSD, description, images });
+    results.push({ location, city, meters, rooms, bedrooms, bathrooms, expenses, price: rawPrice, isUSD, description, images });
   }
 
   return results;
@@ -129,6 +177,11 @@ const scrapeOnePage = async (): Promise<ApartmentData> => {
     description: picked.description,
     prizeInARS,
     prizeInUSD,
+    city: picked.city,
+    rooms: picked.rooms,
+    bedrooms: picked.bedrooms,
+    bathrooms: picked.bathrooms,
+    expenses: picked.expenses,
   };
 };
 
