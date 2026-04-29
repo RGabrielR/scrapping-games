@@ -2,7 +2,7 @@ import NextImage from "next/image";
 import { useState, useEffect } from "react";
 
 const FALLBACK_IMAGE =
-  "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706919556~exp=1706920156~hmac=4f8f900412d171ddb5095c17810818821e9c3a3e893f4f7c114acefda4208fed";
+  "/fallback-speaker-podium.jpg";
 
 interface BlurImageProps {
   image: string | undefined;
@@ -29,6 +29,7 @@ export default function BlurImage({ image, classesToAdd, wrapperClass }: BlurIma
           // Next.js uses these to serve a properly-sized optimized image.
           width={210}
           height={280}
+          unoptimized
           className={`
             h-full w-full object-cover duration-700 ease-in-out group-hover:opacity-75 ${classesToAdd ?? ""}
             ${
